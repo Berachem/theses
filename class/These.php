@@ -14,9 +14,12 @@ COMMENTAAIRE A FAIRE
     private $id;
     private $link;
     private $supervisor;
+    private $theme;
+    private $status;
+    private $subjectsAborded;
 
 
-    public function __construct($titre,$nom,$date, $desc, $id, $lien,$superviseurs){
+    public function __construct($titre,$nom,$date, $desc, $id, $lien,$superviseurs, $discipline, $status, $sujetsAborde){
         $this->title = $titre;
         $this->name = $nom;
         $this->date = $date;
@@ -24,9 +27,12 @@ COMMENTAAIRE A FAIRE
         $this->id = $id;
         $this->link = $lien;
         $this->supervisor = $superviseurs;
+        $this->theme = $discipline;
+        $this->status = $status;
+        $this->subjectsAborded = $sujetsAborde;
     }
 
-    public function titleORdescriptionContainsString($string){
+    public function titleORdescriptionORContainsString($string){
         if (strpos($this->title, $string) !== false) {
             return true;
         }
@@ -35,6 +41,17 @@ COMMENTAAIRE A FAIRE
         }
         return false;
     }
+
+    public function subjectsAbordedListContainsString($string){
+        foreach ($this->subjectsAborded as $subject) {
+            if (strpos($subject, $string) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
 
     public function getTitle(){
@@ -58,7 +75,12 @@ COMMENTAAIRE A FAIRE
     public function getSupervisor(){
         return $this->supervisor;
     }
-
+    public function getTheme(){
+        return $this->theme;
+    }
+    public function hasBeenSupported(){
+        return $this->status;
+    }
 
 
 }
