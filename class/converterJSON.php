@@ -3,7 +3,7 @@
 function getListNamebyList($list){
     $listName = array();
     foreach ($list as $pers) {
-        if (isset($pers->name)) {
+        if (!empty($pers)) {
             array_push($listName, $pers["nom"]." ".$pers["prenom"]);
         }
         
@@ -45,11 +45,13 @@ foreach ($data as $key => $value) {
     $discipline = $value['discipline']['fr'];
     $status = $value['status'];
 
+    print_r($value['directeurs_these']);
+
 
     if ( in_array("fr",$value['sujets'])){ // ARRAY
-        $subjects = $value['sujets']['fr'];
-    }elseif(in_array("en",$value['sujets'])){
-        $subjects = $value['sujets']["en"];
+        $subjects = $value['sujets']["fr"];
+    }elseif(in_array('en',$value['sujets'])){
+        $subjects = $value['sujets']['en'];
     }else{
         $subjects = '';
     }
