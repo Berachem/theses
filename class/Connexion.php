@@ -8,7 +8,7 @@ class Connexion {
     private $pass;
     private $connec;
 
-    public function __construct($db = 'vwryeacbera.mysql.db', $login ='vwryeacbera', $pass=''){
+    public function __construct($db = 'vwryeacbera.mysql.db', $login ='vwryeacbera', $pass='Cherine93'){
         $this->login = $login;
         $this->pass = $pass;
         $this->db = $db;
