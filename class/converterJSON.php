@@ -5,7 +5,7 @@ $data = json_decode($json, true);
 
 print_r($data[0]);
 
-$r = new Cnx('Cherine93');
+$r = new Connexion($pass='Cherine93');
 
 
 

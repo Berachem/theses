@@ -3,7 +3,7 @@
 /*
 Classe qui permet de configurer la connexion à la Base de données
 */
-class Cnx {
+class Connexion {
     private $login;
     private $pass;
     private $connec;
@@ -19,7 +19,7 @@ class Cnx {
         try
         {
                 $bdd = new PDO(
-                            'mysql:host=localhost;dbname='.$this->db.';charset=utf8mb4', 
+                            'mysql:host=vwryeac.cluster030.hosting.ovh.net;dbname='.$this->db.';charset=utf8mb4', 
                                 $this->login, 
                                 $this->pass
                     );
