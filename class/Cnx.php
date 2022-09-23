@@ -8,7 +8,7 @@ class Cnx {
     private $pass;
     private $connec;
 
-    public function __construct($db, $login ='root', $pass=''){
+    public function __construct($db = 'vwryeacbera.mysql.db', $login ='vwryeacbera', $pass=''){
         $this->login = $login;
         $this->pass = $pass;
         $this->db = $db;

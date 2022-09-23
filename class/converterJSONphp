@@ -1,0 +1,52 @@
+<?php
+
+$json = file_get_contents('extract_theses.json');
+$data = json_decode($json, true);
+
+print_r($data[0]);
+
+$r = new Cnx('Cherine93');
+
+
+
+
+
+
+$r->q("SELECT * FROM theses");
+
+
+print_r($r);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+// connect to mysql database
+$connection = mysqli_connect('localhost', 'root', '', 'test');
+mysqli_set_charset($connection, 'utf8');
+
+// insert data into mysql database
+foreach ($data as $row) {
+    $query = "INSERT INTO `test` (`id`, `name`) VALUES ('" . $row['id'] . "', '" . $row['name'] . "')";
+    mysqli_query($connection, $query);
+}
+
+*/
+
+
+
+
+
+?>
