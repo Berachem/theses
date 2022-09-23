@@ -3,7 +3,10 @@
 function getListNamebyList($list){
     $listName = array();
     foreach ($list as $pers) {
-        array_push($listName, $pers["nom"]." ".$pers["prenom"]);
+        if (isset($pers->name)) {
+            array_push($listName, $pers["nom"]." ".$pers["prenom"]);
+        }
+        
     }
     return $listName;
 }
@@ -24,8 +27,8 @@ foreach ($data as $key => $value) {
 
     if ( in_array("fr",$value['resumes'])){
         $description = $value['resumes'][$langue];
-    }elseif(in_array("eng",$value['resumes'])){
-        $description = $value['resumes']["eng"];
+    }elseif(in_array("en",$value['resumes'])){
+        $description = $value['resumes']["en"];
     }else{
         $description = '';
     }
@@ -45,15 +48,15 @@ foreach ($data as $key => $value) {
 
     if ( in_array("fr",$value['sujets'])){ // ARRAY
         $subjects = $value['sujets']['fr'];
-    }elseif(in_array("eng",$value['sujets'])){
-        $subjects = $value['sujets']["eng"];
+    }elseif(in_array("en",$value['sujets'])){
+        $subjects = $value['sujets']["en"];
     }else{
         $subjects = '';
     }
     echo "nnt : ".$id ." titre : ".$title." auteur : ".$author." date : ".$date." description : ".$description." etablissement : ".$etablissement."  embargo : ".$embargo." discipline : ".$discipline." status : ".$status." link : ".$link.'<br>';
     print_r($director).'<br>'. print_r($president).'<br>'. print_r($rapportors).'<br>'. print_r($members).'<br>'. print_r($subjects).'<br>';
 
-    echo "<br><br>";
+    echo "<br><br>" ;
 }
 
 
