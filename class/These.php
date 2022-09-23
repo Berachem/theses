@@ -8,28 +8,28 @@ COMMENTAAIRE A FAIRE
 */
 {
     private $title;
-    private $name;
+    private $author;
     private $date;
     private $description;
     private $id;
     private $link;
     private $supervisor;
-    private $theme;
+    private $discipline;
     private $status;
-    private $subjectsAborded;
+    private $subjectAborded;
 
 
     public function __construct($titre,$nom,$date, $desc, $id, $lien,$superviseurs, $discipline, $status, $sujetsAborde){
         $this->title = $titre;
-        $this->name = $nom;
+        $this->author = $nom;
         $this->date = $date;
         $this->description = $desc;
         $this->id = $id;
         $this->link = $lien;
         $this->supervisor = $superviseurs;
-        $this->theme = $discipline;
+        $this->discipline = $discipline;
         $this->status = $status;
-        $this->subjectsAborded = $sujetsAborde;
+        $this->subjectAborded = $sujetsAborde;
     }
 
     public function titleORdescriptionORContainsString($string){
@@ -52,35 +52,8 @@ COMMENTAAIRE A FAIRE
     }
 
 
-
-
-    public function getTitle(){
-        return $this->title;
-    }
-    public function getName(){
-        return $this->name;
-    }
-    public function getDate(){
-        return $this->date;
-    }
-    public function getDescription(){
-        return $this->description;
-    }
-    public function getId(){
-        return $this->id;
-    }
-    public function getLink(){
-        return $this->link;
-    }
-    public function getSupervisor(){
-        return $this->supervisor;
-    }
-    public function getTheme(){
-        return $this->theme;
-    }
-    public function hasBeenSupported(){
-        return $this->status;
-    }
+    // generate all getters and setters
+    
 
 
 }
