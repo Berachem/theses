@@ -5,10 +5,13 @@ Classe qui permet de configurer la connexion à la Base de données
 */
 class Connexion {
     private $login;
+    private $host;
     private $pass;
     private $connec;
+    private $db;
 
-    public function __construct($db = 'vwryeacbera.mysql.db', $login ='vwryeacbera', $pass='Cherine93'){
+    public function __construct($host, $db, $login, $pass){
+        $this->host = $host;
         $this->login = $login;
         $this->pass = $pass;
         $this->db = $db;
@@ -19,7 +22,7 @@ class Connexion {
         try
         {
                 $bdd = new PDO(
-                            'mysql:host=vwryeac.cluster030.hosting.ovh.net;dbname='.$this->db.';charset=utf8mb4', 
+                            'mysql:host='.$this->host.';dbname='.$this->db.';charset=utf8mb4', 
                                 $this->login, 
                                 $this->pass
                     );
@@ -52,8 +55,6 @@ class Connexion {
 
 
 }
-
-
 /*
 
 $r = new Connexion('autoformation');

@@ -1,4 +1,5 @@
 <?php
+require_once 'Connexion.php';
 
 
 /*
@@ -34,21 +35,22 @@ function getFrenchOrEnglishVersion($list){
 }
 
 
-
+// Décodage d'un fichier JSON Récupère une chaîne encodée JSON et la convertit en une variable PHP
 $json = file_get_contents('extract_theses.json');
 $data = json_decode($json, true);
 
-
+// parcours des thèses
 foreach ($data as $key => $value) {
     $langue = $value['langue'] ;
     $title = $value['titres'][$langue];
-    $author = $value['auteurs'][0]['nom'].' '.$value['auteurs'][0]['prenom'];
+    $author = $value['auteurs'][0]['nom'].' '.$value['auteurs'][0]['prenom'] ;
     $date = $value['date_soutenance'];
     $description = getFrenchOrEnglishVersion($value['resumes']);
     $etablissement = $value['etablissements_soutenance'][0]['nom'];
     $oai_set_specs = $value['oai_set_specs'];
     $embargo = $value['embargo'];
     $id = $value['nnt'];
+    $theseOnWork = $value['these_sur_travaux'];
     $link = "https://www.theses.fr/".$id;
     $director = getListNamebyList($value['directeurs_these']);// ARRAY
     $president = sizeof($value['president_jury'])>0 ? array($value['president_jury']['nom']." ".$value['president_jury']['prenom']) : array(); // ARRAY
@@ -58,47 +60,41 @@ foreach ($data as $key => $value) {
     $status = $value['status'];
     $subjects = getFrenchOrEnglishVersion($value['sujets']);
 
-    echo 'description : ';
-    echo "id : ".$id."<br>";
-    print_r($director);
+    $allMembreJury = array_merge(
+        $director,
+        $president,
+        $rapportors,
+        $members
+    );
+    
+
     echo '<br>';
-    print_r($president);
+    echo "nnt : ".$id ."<br> titre : ".$title."<br> auteur : ".$author."<br> date : ".$date."<br> langue : ".$langue."<br> description : ".$description."<br> etablissement : ".$etablissement."<br> discipline : ".$discipline."<br> status : ".$status."<br> embargo : ".$embargo."<br> these sur travaux : ".$theseOnWork;
     echo '<br>';
-    print_r($rapportors);
-    echo '<br>';
-    print_r($members);
-    echo '<br>';
-    print_r($subjects);
-    echo '<br>';
-    echo "nnt : ".$id ."<br> titre : ".$title."<br> auteur : ".$author."<br> date : ".$date."<br> description : ".$description."<br> etablissement : ".$etablissement."<br> discipline : ".$discipline."<br> status : ".$status."<br><br>";
+    echo 'Tous les membres du jury : '.implode(", ",$allMembreJury)."\n";
     echo "<br><br>" ;
+
+    $r = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*
+EXEMPLE DE PARCOURS POUR RECHERCHER UN MOTIF
 
-// connect to mysql database
-$connection = mysqli_connect('localhost', 'root', '', 'test');
-mysqli_set_charset($connection, 'utf8');
+    $a = $r->q(
+        "SELECT * FROM galerie WHERE description LIKE :motif", 
+		array(
+			array('motif','La%',PDO::PARAM_STR),
+			)
+		);
+    foreach($a as $b){
+        print_r($b);
+        echo '<br>';
+    }
 
-// insert data into mysql database
-foreach ($data as $row) {
-    $query = "INSERT INTO `test` (`id`, `name`) VALUES ('" . $row['id'] . "', '" . $row['name'] . "')";
-    mysqli_query($connection, $query);
-}
 
 */
 
