@@ -1,36 +1,62 @@
 <?php
 
 
-class These
 /*
-COMMENTAAIRE A FAIRE
+ Classe représentant une thèse avec tous ses attributs et ses méthodes
+ qui sont des accesseurs principalement.
 
 */
+class These
 {
-    private $title;
-    private $author;
-    private $date;
-    private $description;
     private $id;
+    private $titre;
+    private $auteur;
+    private $date;
+    private $langue;
+    private $description;
+    private $etablissement;
+    private $oai_set_specs;
+    private $embargo;
+    private $theseOnWork;
     private $link;
-    private $supervisor;
+    private $director;
+    private $president;
+    private $rapportors;
+    private $members;
     private $discipline;
     private $status;
-    private $subjectAborded;
+    private $subjects;
+    private $allMembreJury;
 
-
-    public function __construct($titre,$nom,$date, $desc, $id, $lien,$superviseurs, $discipline, $status, $sujetsAborde){
-        $this->title = $titre;
-        $this->author = $nom;
-        $this->date = $date;
-        $this->description = $desc;
+    function __construct($id, $titre, $auteur, $date, $langue, $description, $etablissement, $oai_set_specs, $embargo, $theseOnWork, $link, $director, $president, $rapportors, $members, $discipline, $status, $subjects){
         $this->id = $id;
-        $this->link = $lien;
-        $this->supervisor = $superviseurs;
+        $this->titre = $titre;
+        $this->auteur = $auteur;
+        $this->date = $date;
+        $this->langue = $langue;
+        $this->description = $description;
+        $this->etablissement = $etablissement;
+        $this->oai_set_specs = $oai_set_specs;
+        $this->embargo = $embargo;
+        $this->theseOnWork = $theseOnWork;
+        $this->link = $link;
+        $this->director = $director;
+        $this->president = $president;
+        $this->rapportors = $rapportors;
+        $this->members = $members;
         $this->discipline = $discipline;
         $this->status = $status;
-        $this->subjectAborded = $sujetsAborde;
-    }
+        $this->subjects = $subjects;
+        $this->allMembreJury = array_merge(
+            $director,
+            $president,
+            $rapportors,
+            $members
+        );
+            
+        }
+
+
 
     public function titleORdescriptionORContainsString($string){
         if (strpos($this->title, $string) !== false) {
@@ -51,167 +77,63 @@ COMMENTAAIRE A FAIRE
         return false;
     }
 
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * @param mixed $author
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * @param mixed $date
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param mixed $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
+    public function getId(){
         return $this->id;
     }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
+    public function getTitre(){
+        return $this->titre;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getLink()
-    {
+    public function getAuteur(){
+        return $this->auteur;
+    }
+    public function getDate(){
+        return $this->date;
+    }
+    public function getLangue(){
+        return $this->langue;
+    }
+    public function getDescription(){
+        return $this->description;
+    }
+    public function getEtablissement(){
+        return $this->etablissement;
+    }
+    public function getOai_set_specs(){
+        return $this->oai_set_specs;
+    }
+    public function getEmbargo(){
+        return $this->embargo;
+    }
+    public function getTheseOnWork(){
+        return $this->theseOnWork;
+    }
+    public function getLink(){
         return $this->link;
     }
-
-    /**
-     * @param mixed $link
-     */
-    public function setLink($link)
-    {
-        $this->link = $link;
+    public function getDirector(){
+        return $this->director;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getSupervisor()
-    {
-        return $this->supervisor;
+    public function getPresident(){
+        return $this->president;
     }
-
-    /**
-     * @param mixed $supervisor
-     */
-    public function setSupervisor($supervisor)
-    {
-        $this->supervisor = $supervisor;
+    public function getRapportors(){
+        return $this->rapportors;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getDiscipline()
-    {
+    public function getMembers(){
+        return $this->members;
+    }
+    public function getDiscipline(){
         return $this->discipline;
     }
-
-    /**
-     * @param mixed $discipline
-     */
-    public function setDiscipline($discipline)
-    {
-        $this->discipline = $discipline;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStatus()
-    {
+    public function getStatus(){
         return $this->status;
     }
-
-    /**
-     * @param mixed $status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
+    public function getSubjects(){
+        return $this->subjects;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getSubjectAborded()
-    {
-        return $this->subjectAborded;
+    public function getAllMembreJury(){
+        return $this->allMembreJury;
     }
-
-    /**
-     * @param mixed $subjectAborded
-     */
-    public function setSubjectAborded($subjectAborded)
-    {
-        $this->subjectAborded = $subjectAborded;
-    }
-
 
 }
 
