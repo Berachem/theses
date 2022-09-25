@@ -64,7 +64,7 @@ function insertAllData($id, $titre, $auteur, $date, $langue, $description, $etab
 			)
 		);
 
-    echo '<br>INSERT INTO theses VALUES ("0","'.$id.'", "'.$titre.'", "'.$auteur.'", "'.$date.'", "'.$langue.'", "'.$description.'", "'.$etablissement.'", "'.$oai_set_specs[0].'", "'.$embargo.'", "'.$theseOnWork.'", "'.$link.'", "'.$discipline.'", "'.$status.'", "'.$subjects.'")<br>';
+    //echo '<br>INSERT INTO theses VALUES ("0","'.$id.'", "'.$titre.'", "'.$auteur.'", "'.$date.'", "'.$langue.'", "'.$description.'", "'.$etablissement.'", "'.$oai_set_specs[0].'", "'.$embargo.'", "'.$theseOnWork.'", "'.$link.'", "'.$discipline.'", "'.$status.'", "'.$subjects.'")<br>';
 
     $roles = array("director", "president", "rapportor", "member");
     $i = 0;
@@ -138,13 +138,13 @@ foreach ($data as $key => $value) {
         $members
     );
     
-
+    /*
     echo '<br>';
     echo "nnt : ".$id ."<br> titre : ".$title."<br> auteur : ".$author."<br> date : ".$date."<br> langue : ".$langue."<br> description : ".$description."<br> etablissement : ".$etablissement."<br> discipline : ".$discipline."<br> status : ".$status."<br> embargo : ".$embargo."<br> these sur travaux : ".$theseOnWork;
     echo '<br>';
     echo 'Tous les membres du jury : '.implode(", ",$allMembreJury)."\n";
     echo "<br><br>" ;
-
+    */
     insertAllData($id,$title,$author,$date,$langue,$description,$etablissement,$oai_set_specs,$embargo,$theseOnWork,$link,$director,$president,$rapportors,$members,$discipline,$status,$subjects);
 
 
