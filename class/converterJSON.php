@@ -35,144 +35,75 @@ function getFrenchOrEnglishVersion($list){
 }
 
 
+/*
+
+Fonction qui insère toutes les données relatives aux thèses dans la base de données
+dans les tables theses, personnes et galerie
+
+*/
+
 function insertAllData($id, $titre, $auteur, $date, $langue, $description, $etablissement, $oai_set_specs, $embargo, $theseOnWork, $link, $director, $president, $rapportors, $members, $discipline, $status, $subjects){
     $db = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
     $db->q(
         'INSERT INTO theses VALUES ("0", :id, :titre, :auteur, :date, :langue, :description, :etablissement, :oai_set_specs, :embargo, :theseOnWork, :link, :discipline, :status, :subjects)',
 		array(
-			array($id,':id'),
-            array($titre,':titre'),
-            array($auteur,':auteur'),
-            array($date,':date'),
-            array($langue,':langue'),
-            array($description,':description'),
-            array($etablissement,':etablissement'),
-            array($oai_set_specs[0],':oai_set_specs'),
-            array($embargo,':embargo'),
-            array($theseOnWork,':theseOnWork'),
-            array($link,':link'),
-            array($discipline,':discipline'),
-            array($status,':status'),
-            array($subjects,':subjects')
+            array(':id', $id),
+            array(':titre', $titre),
+            array(':auteur', $auteur),
+            array(':date', $date),
+            array(':langue', $langue),
+            array(':description', $description),
+            array(':etablissement', $etablissement),
+            array(':oai_set_specs', $oai_set_specs[0]),
+            array(':embargo', $embargo),
+            array(':theseOnWork', $theseOnWork),
+            array(':link', $link),
+            array(':discipline', $discipline),
+            array(':status', $status),
+            array(':subjects', $subjects)
 			)
 		);
 
     echo '<br>INSERT INTO theses VALUES ("0","'.$id.'", "'.$titre.'", "'.$auteur.'", "'.$date.'", "'.$langue.'", "'.$description.'", "'.$etablissement.'", "'.$oai_set_specs[0].'", "'.$embargo.'", "'.$theseOnWork.'", "'.$link.'", "'.$discipline.'", "'.$status.'", "'.$subjects.'")<br>';
 
-        /*
+    $roles = array("director", "president", "rapportor", "member");
+    $i = 0;
+    $allMembers = array($director, $president, $rapportors, $members);
+    foreach ($allMembers as $poste){
+        foreach($poste as $pers){
+            $db->q(
+                "INSERT INTO personnes VALUES (0, :nom)",
+                array(
+                    array(':nom', $pers)
+                )
+                );
+            
+            
+            $id_pers = $db->q(
+                "SELECT DISTINCT id FROM personnes WHERE :nom LIKE nom",
+                array(
+                    array(':nom', $pers)
+                )
+                );
+            $id_pers= $id_pers[0]->id;
 
-            array($director,':director'),
-            array($president,':president'),
-            array($rapportors,':rapportors'),
-            array($members,':members'),
+            echo '<br> pers : '.$pers.' id : '.$id_pers.'<br>';	
 
-        */
-    foreach($director as $pers){
-        $db->q(
-            "INSERT INTO personnes VALUES (:id, :nom)",
-            array(
-                array($id,':id'),
-                array($pers,':nom'),
-            )
-        );
-        $id_pers = $db->q(
-            "SELECT DISTINCT id FROM personnes WHERE :nom LIKE nom",
-            array(
-                array($pers,':nom'),
-            )
-        );
-        $id_pers= $id_pers[0]['id'];
+            $db->q(
+                "INSERT INTO fonction VALUES (0, :nnt, :id_pers,:fonction)",
+                array(
+                    array(':nnt', $id),
+                    array(':id_pers', $id_pers),
+                    array(':fonction', $roles[$i])
 
-        $db->q(
-            "INSERT INTO fonction VALUES (:id,:id_pers,:fonction)",
-            array(
-                array($id,':id'),
-                array($id_pers,':id_pers'),
-                array('directeur',':fonction'),
-            )
-        );
+                )
+            );
+        }
+        $i++;
     }
-
-    foreach($president as $pers){
-        $db->q(
-            "INSERT INTO personnes VALUES (:id, :nom)",
-            array(
-                array($id,':id'),
-                array($pers,':nom'),
-            )
-        );
-        $id_pers = $db->q(
-            "SELECT DISTINCT id FROM personnes WHERE :nom LIKE nom",
-            array(
-                array($pers,':nom'),
-            )
-        );
-        $id_pers= $id_pers[0]['id'];
-
-        $db->q(
-            "INSERT INTO fonction VALUES (:id,:id_pers,:fonction)",
-            array(
-                array($id,':id'),
-                array($id_pers,':id_pers'),
-                array('president',':fonction'),
-            )
-        );
-    }
-
-    foreach($rapportors as $pers){
-        $db->q(
-            "INSERT INTO personnes VALUES (:id, :nom)",
-            array(
-                array($id,':id'),
-                array($pers,':nom'),
-            )
-        );
-        $id_pers = $db->q(
-            "SELECT DISTINCT id FROM personnes WHERE :nom LIKE nom",
-            array(
-                array($pers,':nom'),
-            )
-        );
-        $id_pers= $id_pers[0]['id'];
-
-        $db->q(
-            "INSERT INTO fonction VALUES (:id,:id_pers,:fonction)",
-            array(
-                array($id,':id'),
-                array($id_pers,':id_pers'),
-                array('rapporteur',':fonction'),
-            )
-        );
-    }
-
-
-    foreach($members as $pers){
-        $db->q(
-            "INSERT INTO personnes VALUES (:id, :nom)",
-            array(
-                array($id,':id'),
-                array($pers,':nom'),
-            )
-        );
-        $id_pers = $db->q(
-            "SELECT DISTINCT id FROM personnes WHERE :nom LIKE nom",
-            array(
-                array($pers,':nom'),
-            )
-        );
-        $id_pers= $id_pers[0]['id'];
-
-        $db->q(
-            "INSERT INTO fonction VALUES (:id,:id_pers,:fonction)",
-            array(
-                array($id,':id'),
-                array($id_pers,':id_pers'),
-                array('membre',':fonction'),
-            )
-        );
-    }
-
 }
+
+
 
 
 // Décodage d'un fichier JSON Récupère une chaîne encodée JSON et la convertit en une variable PHP
@@ -198,7 +129,7 @@ foreach ($data as $key => $value) {
     $members = getListNamebyList($value['membres_jury']); // ARRAY
     $discipline = $value['discipline']['fr'];
     $status = $value['status'];
-    $subjects = getFrenchOrEnglishVersion($value['sujets']);
+    $subjects = implode(', ',getFrenchOrEnglishVersion($value['sujets']));
 
     $allMembreJury = array_merge(
         $director,

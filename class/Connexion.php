@@ -46,8 +46,8 @@ class Connexion {
             }
         }
 
-        $stmt->execute();
-
+        
+        $stmt->execute();    
         return $stmt->fetchAll();
         $stmt->closeCursor();
         $stmt=NULL;
