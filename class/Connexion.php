@@ -48,6 +48,7 @@ class Connexion {
 
         
         $stmt->execute();    
+        //$stmt->debugDumpParams();
         return $stmt->fetchAll();
         $stmt->closeCursor();
         $stmt=NULL;
