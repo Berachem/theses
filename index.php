@@ -12,6 +12,7 @@ if (isset($_GET["search"])) {
         )
  
     );
+    //print_r($researchThesesDB);
     $roles = array("director", "president", "rapportor", "member");
     $directors = array();
     $presidents = array();
@@ -60,6 +61,9 @@ if (isset($_GET["search"])) {
         );
         array_push($theses, $these);
     }
+
+    echo(sizeof($theses));
+    //print_r($theses);
 }
 
 ?>
@@ -229,13 +233,13 @@ if (isset($_GET["search"])) {
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
+                    <form method="GET" action="index.php"
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Rechercher..."
-                                aria-label="Search" aria-describedby="basic-addon2">
+                                aria-label="Search" name ="search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
+                                <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
                                 </button>
                             </div>
@@ -445,7 +449,9 @@ if (isset($_GET["search"])) {
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Nombre de thèses (au total)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">40 000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                <?php echo sizeof($theses); ?>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
