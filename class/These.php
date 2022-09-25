@@ -47,7 +47,7 @@ class These
         $this->discipline = $discipline;
         $this->status = $status;
         $this->subjects = $subjects;
-        $this->allMembreJury = array_merge(
+        $this->allMembreJury = array(
             $director,
             $president,
             $rapportors,

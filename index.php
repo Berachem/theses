@@ -1,3 +1,69 @@
+<?php
+require_once 'class/These.php';
+require_once 'class/Connexion.php';
+
+if (isset($_GET["search"])) {
+    $db = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
+    $theses = array();
+    $researchThesesDB = $db->q(
+        "SELECT * FROM theses WHERE titres LIKE :search OR auteurs LIKE :search OR etablissements_soutenance LIKE :search OR resume LIKE :search OR sujets LIKE :search OR discipline LIKE :search",
+        array(
+            array(':search', '%'.$_GET["search"].'%')
+        )
+ 
+    );
+    $roles = array("director", "president", "rapportor", "member");
+    $directors = array();
+    $presidents = array();
+    $rapportors = array();
+    $members = array();
+    $researchAllMembersDB = $db->q(
+        "SELECT * FROM fonction f, personnes p  WHERE f.idpers = p.id AND nom LIKE :search OR prenom LIKE :search",
+        array(
+            array(':search', '%'.$_GET["search"].'%')
+        )
+    );
+    foreach ($researchAllMembersDB as $member) {
+        if ($member["fonction"] == "director") {
+            array_push($directors, $member);
+        }
+        if ($member["fonction"] == "president") {
+            array_push($presidents, $member);
+        }
+        if ($member["fonction"] == "rapportor") {
+            array_push($rapportors, $member);
+        }
+        if ($member["fonction"] == "member") {
+            array_push($members, $member);
+        }
+    }
+    foreach ($researchThesesDB as $TMPthese) {
+        $these = new These(
+            $TMPthese["id"],
+            $TMPthese["titres"],
+            $TMPthese["auteurs"],
+            $TMPthese["date_soutenance"],
+            $TMPthese["langue"],
+            $TMPthese["resume"],
+            $TMPthese["etablissements_soutenance"],
+            $TMPthese["oai_set_specs"],
+            $TMPthese["embargo"],
+            $TMPthese["theseOnWork"],
+            $TMPthese["lien"],
+            $directors,
+            $presidents,
+            $rapportors,
+            $members,
+            $TMPthese["discipline"],
+            $TMPthese["statut"],
+            $TMPthese["sujets"]
+        );
+        array_push($theses, $these);
+    }
+}
+
+?>
+
 
 
 <!DOCTYPE html>
