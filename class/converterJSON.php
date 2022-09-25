@@ -38,7 +38,7 @@ function getFrenchOrEnglishVersion($list){
 /*
 
 Fonction qui insère toutes les données relatives aux thèses dans la base de données
-dans les tables theses, personnes et galerie
+dans les tables theses, personnes et fonction
 
 */
 
@@ -87,7 +87,7 @@ function insertAllData($id, $titre, $auteur, $date, $langue, $description, $etab
                 );
             $id_pers= $id_pers[0]->id;
 
-            echo '<br> pers : '.$pers.' id : '.$id_pers.'<br>';	
+            //echo '<br> pers : '.$pers.' id : '.$id_pers.'<br>';	
 
             $db->q(
                 "INSERT INTO fonction VALUES (0, :nnt, :id_pers,:fonction)",
