@@ -1,6 +1,7 @@
 <?php
 require_once 'class/These.php';
 require_once 'class/Connexion.php';
+session_start();
 
 /*
  * Renvoie le nombre d'établissements différents des thèses
@@ -19,6 +20,7 @@ if (isset($_GET["search"])) {
     $db = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
     $motif = $_GET["search"];
     $theses = getAllThesesByAttributes($db, $motif);
+    $_SESSION["theses"] = $theses;
     //print_r($theses);
 }else if (isset($_GET["random"])){
     //On prend un mot aléatoire dans un fichier texte
@@ -554,21 +556,7 @@ if (isset($_GET["search"])) {
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
+                                    <h6 class="m-0 font-weight-bold text-primary">Langues</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -577,13 +565,16 @@ if (isset($_GET["search"])) {
                                     </div>
                                     <div class="mt-4 text-center small">
                                         <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
+                                            <i class="fas fa-circle text-primary"></i> Français
                                         </span>
                                         <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
+                                            <i class="fas fa-circle text-danger"></i> Anglais
                                         </span>
                                         <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
+                                            <i class="fas fa-circle text-success"></i> Français & Anglais
+                                        </span>
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle text-dark"></i> Autres
                                         </span>
                                     </div>
                                 </div>
@@ -855,8 +846,8 @@ if (isset($_GET["search"])) {
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-pie-demo.js"></script>
 <?php
-    include("js/demo/chart-area-demo.php");
-
+    include("js/demo/chart-area.php");
+    include("js/demo/chart-pie.php");
 ?>
 </body>
 
