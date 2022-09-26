@@ -2,7 +2,17 @@
 require_once 'class/These.php';
 require_once 'class/Connexion.php';
 
-
+/*
+ * Renvoie le nombre d'établissements différents des thèses
+ */
+function getNumberDistinctEtablissements($theses){
+    foreach($theses as $these){
+        $etablissements[] = $these->getEtablissement();
+        // remove duplicates
+        $etablissements = array_unique($etablissements);
+    }
+    return count($etablissements);
+}
 
 if (isset($_GET["search"])) {
     include('class/thesesSearcher.php');
@@ -11,11 +21,15 @@ if (isset($_GET["search"])) {
     $theses = getAllThesesByAttributes($db, $motif);
     //print_r($theses);
 }else if (isset($_GET["random"])){
-    //get a random word in line of the file words.txt
+    //On prend un mot aléatoire dans un fichier texte
     $words = file('mot_francais.txt');
     $randomWord = $words[array_rand($words)];
     header('Location: index.php?search='.$randomWord);
 }
+
+
+
+
 
 ?>
 
@@ -54,7 +68,7 @@ if (isset($_GET["search"])) {
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-book"></i>
                 </div>
@@ -66,7 +80,7 @@ if (isset($_GET["search"])) {
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Tableau de bord</span></a>
             </li>
@@ -223,6 +237,11 @@ if (isset($_GET["search"])) {
                                             <button class="btn btn-primary" type="button">
                                                 <i class="fas fa-search fa-sm"></i>
                                             </button>
+                                            <a href="index.php?random=1">
+                                                <button class="btn btn-success" type="button">
+                                                    <i class="fas fa-random fa-sm"></i>
+                                                </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </form>
@@ -389,7 +408,18 @@ if (isset($_GET["search"])) {
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Tableau de bord</h1>
+                            <?php
+                                    if (sizeof($theses) == 0) {
+                                        echo '
+                                            <div class="badge badge-warning text-white shadow">
+                                                <div class="card-body">
+                                                    Nous n\'avons rien trouvé comme thèses à propos de cette recherche... :/ réessayez
+                                                </div>
+                                            </div>';
+                                    }
+
+                            ?>
                         <a href="class/extract_theses.json" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Download JSON</a>
                     </div>
@@ -404,7 +434,7 @@ if (isset($_GET["search"])) {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Nombre de thèses (au total)</div>
+                                                Nombre de thèses</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                 <?php echo sizeof($theses); ?>
                                             </div>
@@ -471,11 +501,11 @@ if (isset($_GET["search"])) {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Requests</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                                Nombre d'établissements</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo getNumberDistinctEtablissements($theses) ?></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                            <i class="fas fa-school fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -564,6 +594,53 @@ if (isset($_GET["search"])) {
                     <!-- Content Row -->
                     <div class="row">
 
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Quelques thèses</h6>
+                    </div>
+                    <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>NNT</th>
+                                            <th>Titre</th>
+                                            <th>Auteur</th>
+                                            <th>Date de Soutenance</th>
+                                            <th>Etablissement</th>
+                                            <th>langue</th>
+                                            <th>discipline</th>
+                                            <th>Liens</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                            $SliceTheses = array_slice($theses, 0, 6);
+                                            foreach($SliceTheses as $these){
+                                                echo "<tr>";
+                                                echo "<td>".$these->getID()."</td>";
+                                                echo "<td>".$these->getTitre()."</td>";
+                                                echo "<td>".$these->getAuteur()."</td>";
+                                                echo "<td>".$these->getDate()."</td>";
+                                                echo "<td>".$these->getEtablissement()."</td>";
+                                                echo "<td>".$these->getLangue()."</td>";
+                                                echo "<td>".$these->getDiscipline()."</td>";
+                                                echo '<td><a class="btn btn-info" href="https://www.theses.fr/'.$these->getID().'" target="_blank">  
+                                                <i class="fas fa-eye"></i>
+                                                Consulter</a></td>';
+                                                echo "</tr>";
+                                             
+                                            }
+
+                                        ?>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                
                         <!-- Content Column -->
                         <div class="col-lg-6 mb-4">
 
