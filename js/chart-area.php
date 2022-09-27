@@ -1,7 +1,30 @@
+<?php
+session_start();
+$theses = $_SESSION["theses"];
 
+$actualYear = date("Y");
+$thesesNumberPerYear = array();
+$startYear = 1985;
+$tmpNumberTheses = 0;
+
+for ($i = $startYear; $i <= (int) $actualYear; $i++) {
+  foreach($theses as $these){
+    $date = DateTime::createFromFormat("Y-m-d", $these->getDate());
+    $date = $date->format('Y');
+    if((int) $date == $i){
+      $tmpNumberTheses++;
+    }
+  }
+  $thesesNumberPerYear[$i] = $tmpNumberTheses;
+  $tmpNumberTheses = 0;
+}
+
+
+?>
 
 <script>
 
+console.log("salut") ;
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
@@ -36,9 +59,17 @@ var ctx = document.getElementById("myAreaChart");
 var myLineChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ["Jan", "ddd", "<?php echo "TEST"; ?>", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    labels: [
+      <?php  
+      foreach(array_keys($thesesNumberPerYear) as $key) {
+        echo '"'.$key.'",';
+      }
+      
+      ?>
+
+    ],
     datasets: [{
-      label: "Earnings",
+      label: "Thèses",
       lineTension: 0.3,
       backgroundColor: "rgba(78, 115, 223, 0.05)",
       borderColor: "rgba(78, 115, 223, 1)",
@@ -50,7 +81,15 @@ var myLineChart = new Chart(ctx, {
       pointHoverBorderColor: "rgba(78, 115, 223, 1)",
       pointHitRadius: 10,
       pointBorderWidth: 2,
-      data: [150000, 10000, <?php echo 1000; ?>, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
+      data: [
+        <?php  
+        
+          foreach(array_keys($thesesNumberPerYear) as $key) {
+            echo $thesesNumberPerYear[$key].',';
+          }
+          
+          ?>
+      ],
     }],
   },
   options: {
@@ -82,7 +121,7 @@ var myLineChart = new Chart(ctx, {
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
-            return '$' + number_format(value);
+            return number_format(value);
           }
         },
         gridLines: {
@@ -114,7 +153,7 @@ var myLineChart = new Chart(ctx, {
       callbacks: {
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+          return  number_format(tooltipItem.yLabel) +" "+  datasetLabel;
         }
       }
     }

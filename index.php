@@ -15,6 +15,7 @@ function getNumberDistinctEtablissements($theses){
     return count($etablissements);
 }
 
+
 if (isset($_GET["search"])) {
     include('class/thesesSearcher.php');
     $db = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
@@ -29,10 +30,6 @@ if (isset($_GET["search"])) {
     header('Location: index.php?search='.$randomWord);
 }
 
-
-
-
-
 ?>
 
 
@@ -46,7 +43,8 @@ if (isset($_GET["search"])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="berachem" content="">
+    <link rel="icon" type="image/png" href="img/book.png" />
 
     <title>Thèses.fr </title>
 
@@ -58,6 +56,7 @@ if (isset($_GET["search"])) {
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -416,7 +415,7 @@ if (isset($_GET["search"])) {
                                         echo '
                                             <div class="badge badge-warning text-white shadow">
                                                 <div class="card-body">
-                                                    Nous n\'avons rien trouvé comme thèses à propos de cette recherche... :/ réessayez
+                                                <i class="fas fa-exclamation-triangle"></i> Nous n\'avons rien trouvé comme thèses à propos de cette recherche... :/ réessayez
                                                 </div>
                                             </div>';
                                     }
@@ -525,7 +524,7 @@ if (isset($_GET["search"])) {
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Evolution du nombre de thèses dans le temps</h6>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -792,7 +791,12 @@ if (isset($_GET["search"])) {
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>By Berachem MARKRIA</span>
+                        <span>
+                            <?php 
+                                $copyYear = 2022; 
+                                $curYear = date('Y'); 
+                                echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
+                                ?> By Berachem MARKRIA</span>
                     </div>
                 </div>
             </footer>
@@ -843,11 +847,10 @@ if (isset($_GET["search"])) {
     <!-- Page level plugins -->
     <script src="vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-pie-demo.js"></script>
 <?php
-    include("js/demo/chart-area.php");
-    include("js/demo/chart-pie.php");
+    include("js/chart-pie.php");
+    include("js/chart-area.php");
+    
 ?>
 </body>
 

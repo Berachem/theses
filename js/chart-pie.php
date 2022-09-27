@@ -38,7 +38,7 @@ var myPieChart = new Chart(ctx, {
   data: {
     labels: ["fr", "en", "enfr", "autres"],
     datasets: [{
-      data: [parseInt(<?php echo $FRlanguageNumber; ?>), parseInt(<?php echo $ENlanguageNumber; ?>), parseInt(<?php echo $ENFRlanguageNumber; ?>), parseInt(<?php echo $otherLanguageNumber; ?>)],
+      data: [<?php echo $FRlanguageNumber; ?>, parseInt(<?php echo $ENlanguageNumber; ?>), parseInt(<?php echo $ENFRlanguageNumber; ?>), parseInt(<?php echo $otherLanguageNumber; ?>)],
       backgroundColor: ['#4e73df', '#C8331C', '#13D253', '#A808A0'],
       hoverBackgroundColor: ['#2e59d9', '#A62817', '#2CAF35', '#D21399'],
       hoverBorderColor: "rgba(234, 236, 244, 1)",

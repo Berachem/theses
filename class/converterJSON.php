@@ -43,7 +43,11 @@ dans les tables theses, personnes et fonction
 */
 
 function insertAllData($id, $titre, $auteur, $date, $langue, $description, $etablissement, $oai_set_specs, $embargo, $theseOnWork, $link, $director, $president, $rapportors, $members, $discipline, $status, $subjects){
-    $db = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
+    
+    // CONNEXION A LA BASE DE DONNEES
+    // OBLIGATOIRE
+    $db = new Connexion(...........,...........,...........,......... );
+
     $db->q(
         'INSERT INTO theses VALUES ("0", :id, :titre, :auteur, :date, :langue, :description, :etablissement, :oai_set_specs, :embargo, :theseOnWork, :link, :discipline, :status, :subjects)',
 		array(
