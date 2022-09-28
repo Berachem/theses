@@ -15,20 +15,27 @@ function getNumberDistinctEtablissements($theses){
     return count($etablissements);
 }
 
-
-if (isset($_GET["search"])) {
-    include('class/thesesSearcher.php');
-    $db = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
-    $motif = $_GET["search"];
-    $theses = getAllThesesByAttributes($db, $motif);
-    $_SESSION["theses"] = $theses;
-    //print_r($theses);
-}else if (isset($_GET["random"])){
+if (isset($_GET["random"])){
     //On prend un mot aléatoire dans un fichier texte
     $words = file('mot_francais.txt');
     $randomWord = $words[array_rand($words)];
     header('Location: index.php?search='.$randomWord);
 }
+
+include('class/thesesSearcher.php');
+$db = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
+
+if (!isset($_GET['search'])) {
+    $motif = "";
+}
+if (isset($_GET["search"])) {
+    $motif = $_GET["search"];
+} 
+
+$theses = getAllThesesByAttributes($db, $motif);
+$_SESSION["theses"] = $theses;
+
+
 
 ?>
 
@@ -406,7 +413,13 @@ if (isset($_GET["search"])) {
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                        <?php
 
+                            if ($motif != ""){
+                                echo '<i class="badge badge-primary">Recherche pour "'.$motif.'"</i>';
+                            }
+
+                        ?>
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Tableau de bord</h1>
@@ -455,11 +468,21 @@ if (isset($_GET["search"])) {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Nombre de thèses en cours</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">5 000</div>
+                                                Nombre de directeurs de thèses</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                 <?php 
+                                                    $nbDirectors = 0;
+                                                    foreach ($theses as $these) {
+                                                        $nbDirectors += sizeof($these->getDirector());
+                                                    }
+                                                    echo $nbDirectors;
+                                                 
+                                                 
+                                                 ?>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-search fa-2x text-gray-300"></i>
+                                            <i class="fa-solid fa-user fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -525,20 +548,7 @@ if (isset($_GET["search"])) {
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Evolution du nombre de thèses dans le temps</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
+
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -601,7 +611,7 @@ if (isset($_GET["search"])) {
                                             <th>langue</th>
                                             <th>discipline</th>
                                             <th>Liens</th>
-
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -609,12 +619,20 @@ if (isset($_GET["search"])) {
                                             $SliceTheses = array_slice($theses, 0, 6);
                                             foreach($SliceTheses as $these){
                                                 echo "<tr>";
-                                                echo "<td>".$these->getID()."</td>";
+                                                echo "<td> <i>".$these->getID()."</i></td>";
                                                 echo "<td>".$these->getTitre()."</td>";
                                                 echo "<td>".$these->getAuteur()."</td>";
                                                 echo "<td>".$these->getDate()."</td>";
                                                 echo "<td>".$these->getEtablissement()."</td>";
-                                                echo "<td>".$these->getLangue()."</td>";
+                                                if ($these->getLangue() == "fr"){
+                                                    echo '<td> <img src="img/fr.png" alt="" width="35" height="35"> </td>'; 
+                                                } else if ($these->getLangue() == "en"){
+                                                    echo '<td> <img src="img/en.png" alt="" width="35" height="35"> </td>';
+                                                } else if ($these->getLangue() == "enfr"){
+                                                    echo '<td> <img src="img/fr.png" alt="" width="35" height="35"><img src="img/en.png" alt="" width="35" height="35"> </td>';
+                                                } else {
+                                                    echo "<td>Autres</td>";
+                                                }
                                                 echo "<td>".$these->getDiscipline()."</td>";
                                                 echo '<td><a class="btn btn-info" href="https://www.theses.fr/'.$these->getID().'" target="_blank">  
                                                 <i class="fas fa-eye"></i>
