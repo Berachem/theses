@@ -1,2 +1,2 @@
-# theses
+# 📚 theses
  Visualisation de thèses publiques
