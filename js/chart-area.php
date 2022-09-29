@@ -2,23 +2,41 @@
 session_start();
 $theses = $_SESSION["theses"];
 
-$actualYear = date("Y");
-$thesesNumberPerYear = array();
-$startYear = 1985;
-$tmpNumberTheses = 0;
 
-for ($i = $startYear; $i <= (int) $actualYear; $i++) {
+if (isset($_SESSION["chart"]) && $_SESSION["chart"] == "month"){
+  $months = array("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre");
+  $thesesNumberPerMonth = array();
+  for($i = 0; $i < 12; $i++)  {
+    $thesesNumberPerMonth[$i] = 0;
+  }
   foreach($theses as $these){
     $date = DateTime::createFromFormat("Y-m-d", $these->getDate());
-    $date = $date->format('Y');
-    if((int) $date == $i){
-      $tmpNumberTheses++;
-    }
-  }
-  $thesesNumberPerYear[$i] = $tmpNumberTheses;
-  $tmpNumberTheses = 0;
-}
+    $month = (int) $date->format('m');
 
+    $thesesNumberPerMonth[$month - 1]++;
+  }
+
+}else{
+
+
+  $actualYear = date("Y");
+  $thesesNumberPerYear = array();
+  $startYear = 1985;
+  $tmpNumberTheses = 0;
+
+  for ($i = $startYear; $i <= (int) $actualYear; $i++) {
+    foreach($theses as $these){
+      $date = DateTime::createFromFormat("Y-m-d", $these->getDate());
+      $date = $date->format('Y');
+      if((int) $date == $i){
+        $tmpNumberTheses++;
+      }
+    }
+    $thesesNumberPerYear[$i] = $tmpNumberTheses;
+    $tmpNumberTheses = 0;
+  }
+
+}
 
 ?>
 
@@ -61,9 +79,16 @@ var myLineChart = new Chart(ctx, {
   data: {
     labels: [
       <?php  
+
+      if (isset($_SESSION["chart"]) && $_SESSION["chart"] == "month"){
+        foreach($months as $month) {
+          echo '"' . $month . '",';
+        }
+      }else{
       foreach(array_keys($thesesNumberPerYear) as $key) {
         echo '"'.$key.'",';
       }
+    }
       
       ?>
 
@@ -83,11 +108,15 @@ var myLineChart = new Chart(ctx, {
       pointBorderWidth: 2,
       data: [
         <?php  
-        
-          foreach(array_keys($thesesNumberPerYear) as $key) {
-            echo $thesesNumberPerYear[$key].',';
-          }
-          
+          if (isset($_SESSION["chart"]) && $_SESSION["chart"] == "month"){
+            foreach($thesesNumberPerMonth as $number) {
+              echo $number . ',';
+            }
+          }else{
+            foreach(array_keys($thesesNumberPerYear) as $key) {
+              echo $thesesNumberPerYear[$key].',';
+            }
+        }
           ?>
       ],
     }],

@@ -4,6 +4,30 @@ require_once 'class/Connexion.php';
 session_start();
 
 /*
+ * Renvoie les 10 premiers sujets abordés les plus récurrents
+ */
+function getThe10MostReccurentSubjects($theses){
+    $subjects = array();
+    foreach($theses as $these){
+        // split the subjects string into list
+        $TMPsubjects = explode(",", $these->getSubjects());
+        foreach($TMPsubjects as $subject){
+            // if the subject is not in the list, add it
+            if(in_array($subject, $subjects)){
+                $subjects[$subject]++;
+            }else{
+                $subjects[$subject] = 1;
+            }
+        }
+    }
+    // sort the list by value
+    arsort($subjects);
+    // return the 10 first keys elements
+    return array_slice($subjects, 0, 10);
+}
+
+
+/*
  * Renvoie le nombre d'établissements différents des thèses
  */
 function getNumberDistinctEtablissements($theses){
@@ -572,7 +596,21 @@ $_SESSION["theses"] = $theses;
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Evolution du nombre de thèses dans le temps</h6>
+                                   
+                                   <?php
+                                   if (isset($_GET["chart"])){
+                                    $_SESSION["chart"] = $_GET["chart"];
+                                    if ($_GET["chart"] == "year") {
+                                        echo '<a href="index.php?search='.$motif.'&chart=month" class ="btn btn-dark">Voir par mois</a>';
+                                    } else {
+                                        echo '<a href="index.php?search='.$motif.'&chart=year" class ="btn btn-dark">Voir par années</a>';
+                                    }
+                        
+                                   }else{
+                                    echo '<a href="index.php?search='.$motif.'&chart=month" class ="btn btn-dark">Voir par mois</a>';
 
+                                   }
+                                    ?>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -617,6 +655,43 @@ $_SESSION["theses"] = $theses;
 
                     <!-- Content Row -->
                     <div class="row">
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">
+                                        Sujets les plus abordés
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <p>
+                                        <?php
+                                            // array of ten colors
+                                            $colors = array(
+                                                "#4e73df",
+                                                "#1cc88a",
+                                                "#36b9cc",
+                                                "#f6c23e",
+                                                "#e74a3b",
+                                                "#858796",
+                                                "#0022FF",
+                                                "#2e59d9",
+                                                "#17a673",
+                                                "#2c9faf",
+                                                "#f6c23e",
+                                                "#e74a3b");
+                            
+                                            // create badges for each key subject most aborded
+                                            $subjects = getThe10MostReccurentSubjects($theses);
+                                            foreach (array_keys($subjects) as $subject) {
+                                                echo '<span class="badge badge-primary" style="background-color:'.$colors[array_rand($colors)].'">'.$subject.'</span> ';
+                                            }
+                                        ?>
+
+                                    </p>
+   
+                                </div>
+                            </div>
+
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
@@ -815,19 +890,7 @@ $_SESSION["theses"] = $theses;
                                 </div>
                             </div>
 
-                            <!-- Approach -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                                </div>
-                                <div class="card-body">
-                                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                        CSS bloat and poor page performance. Custom CSS classes are used to create
-                                        custom components and custom utility classes.</p>
-                                    <p class="mb-0">Before working with this theme, you should become familiar with the
-                                        Bootstrap framework, especially the utility classes.</p>
-                                </div>
-                            </div>
+
 
                         </div>
                     </div>
@@ -896,7 +959,9 @@ $_SESSION["theses"] = $theses;
     <script src="js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
+  
     <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 
 <?php
     include("js/chart-pie.php");
