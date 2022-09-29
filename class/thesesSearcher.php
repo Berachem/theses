@@ -11,7 +11,7 @@ function getAllThesesByAttributes($db, $motif){
         // On recherche tous les thèses qui correspondent à la recherche
         $theses = array();
         $researchThesesDB = $db->q(
-            "SELECT * FROM theses WHERE titres LIKE :search OR auteurs LIKE :search OR etablissements_soutenance LIKE :search OR resume LIKE :search OR sujets LIKE :search OR discipline LIKE :search",
+            "SELECT * FROM theses WHERE nnt LIKE :search OR titres LIKE :search OR auteurs LIKE :search OR etablissements_soutenance LIKE :search OR resume LIKE :search OR sujets LIKE :search OR discipline LIKE :search",
             array(
                 array(':search', '%'.$motif.'%')
             )
@@ -75,7 +75,8 @@ function getAllThesesByAttributes($db, $motif){
                 $members,
                 $these->discipline,
                 $these->status,
-                $these->sujets
+                $these->sujets,
+                $these->accessible
             );
             array_push($theses, $these);
         }

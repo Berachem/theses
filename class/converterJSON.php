@@ -42,14 +42,14 @@ dans les tables theses, personnes et fonction
 
 */
 
-function insertAllData($id, $titre, $auteur, $date, $langue, $description, $etablissement, $oai_set_specs, $embargo, $theseOnWork, $link, $director, $president, $rapportors, $members, $discipline, $status, $subjects){
+function insertAllData($id, $titre, $auteur, $date, $langue, $description, $etablissement, $oai_set_specs, $embargo, $theseOnWork, $link, $director, $president, $rapportors, $members, $discipline, $status, $subjects, $accessible){
     
     // CONNEXION A LA BASE DE DONNEES
     // OBLIGATOIRE
-    $db = new Connexion(...........,...........,...........,......... );
+    $db = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
 
     $db->q(
-        'INSERT INTO theses VALUES ("0", :id, :titre, :auteur, :date, :langue, :description, :etablissement, :oai_set_specs, :embargo, :theseOnWork, :link, :discipline, :status, :subjects)',
+        'INSERT INTO theses VALUES ("0", :id, :titre, :auteur, :date, :langue, :description, :etablissement, :oai_set_specs, :embargo, :theseOnWork, :link, :discipline, :status, :subjects, :enligne)',
 		array(
             array(':id', $id),
             array(':titre', $titre),
@@ -64,7 +64,9 @@ function insertAllData($id, $titre, $auteur, $date, $langue, $description, $etab
             array(':link', $link),
             array(':discipline', $discipline),
             array(':status', $status),
-            array(':subjects', $subjects)
+            array(':subjects', $subjects),
+            array(':enligne', $accessible)
+
 			)
 		);
 
@@ -134,6 +136,7 @@ foreach ($data as $key => $value) {
     $discipline = $value['discipline']['fr'];
     $status = $value['status'];
     $subjects = implode(', ',getFrenchOrEnglishVersion($value['sujets']));
+    $accessible = $value['accessible'];
 
     $allMembreJury = array_merge(
         $director,
@@ -149,7 +152,7 @@ foreach ($data as $key => $value) {
     echo 'Tous les membres du jury : '.implode(", ",$allMembreJury)."\n";
     echo "<br><br>" ;
     */
-    insertAllData($id,$title,$author,$date,$langue,$description,$etablissement,$oai_set_specs,$embargo,$theseOnWork,$link,$director,$president,$rapportors,$members,$discipline,$status,$subjects);
+    insertAllData($id,$title,$author,$date,$langue,$description,$etablissement,$oai_set_specs,$embargo,$theseOnWork,$link,$director,$president,$rapportors,$members,$discipline,$status,$subjects, $accessible);
 
 
 }

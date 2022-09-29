@@ -27,8 +27,9 @@ class These
     private $status;
     private $subjects;
     private $allMembreJury;
+    private $enligne;
 
-    function __construct($id, $titre, $auteur, $date, $langue, $description, $etablissement, $oai_set_specs, $embargo, $theseOnWork, $link, $director, $president, $rapportors, $members, $discipline, $status, $subjects){
+    function __construct($id, $titre, $auteur, $date, $langue, $description, $etablissement, $oai_set_specs, $embargo, $theseOnWork, $link, $director, $president, $rapportors, $members, $discipline, $status, $subjects, $accessible){
         $this->id = $id;
         $this->titre = $titre;
         $this->auteur = $auteur;
@@ -47,6 +48,7 @@ class These
         $this->discipline = $discipline;
         $this->status = $status;
         $this->subjects = $subjects;
+        $this->enligne = $accessible;
         $this->allMembreJury = array(
             $director,
             $president,
@@ -75,6 +77,10 @@ class These
             }
         }
         return false;
+    }
+
+    public function getEnligne(){
+        return $this->enligne;
     }
 
     public function getId(){

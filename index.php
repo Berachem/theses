@@ -64,6 +64,7 @@ $_SESSION["theses"] = $theses;
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
 
 </head>
 
@@ -463,11 +464,11 @@ $_SESSION["theses"] = $theses;
 
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Nombre de directeurs de thèses</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                  <?php 
@@ -482,7 +483,7 @@ $_SESSION["theses"] = $theses;
                                             </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fa-solid fa-user fa-2x text-gray-300"></i>
+                                            <i class="fa-solid fa fa-users fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -495,23 +496,46 @@ $_SESSION["theses"] = $theses;
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Nombre de thèses en ligne
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                                <?php 
+                                                    $nbTheseEnligne = 0;
+                                                    foreach ($theses as $these) {
+                                                        if ($these->getEnligne() == "oui") {
+                                                            $nbTheseEnligne++;
+                                                        }
+                                                    }
+                                                    echo $nbTheseEnligne;
+                                                 
+                                                 
+                                                 ?> thèses
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                        <?php
+                                                            echo round($nbTheseEnligne / sizeof($theses) * 100);
+                                                        ?>%
+                                                        
+                                                    </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
                                                         <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                            style="width: <?php
+                                                                echo round($nbTheseEnligne / sizeof($theses) * 100);
+                                                            ?>%" aria-valuenow="
+                                                            <?php
+                                                                echo round($nbTheseEnligne / sizeof($theses) * 100);
+                                                            ?>
+                                                        " aria-valuemin="0"
                                                             aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                            <i class="fas fa-eye fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -600,7 +624,9 @@ $_SESSION["theses"] = $theses;
                     </div>
                     <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" 
+                                data-toggle="table" data-pagination="true"
+                                data-search="true" data-show-columns="true">
                                     <thead>
                                         <tr>
                                             <th>NNT</th>
@@ -611,12 +637,13 @@ $_SESSION["theses"] = $theses;
                                             <th>langue</th>
                                             <th>discipline</th>
                                             <th>Liens</th>
+                                            <th>Télécharger</th>
                                             
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
-                                            $SliceTheses = array_slice($theses, 0, 6);
+                                            $SliceTheses = $theses;
                                             foreach($SliceTheses as $these){
                                                 echo "<tr>";
                                                 echo "<td> <i>".$these->getID()."</i></td>";
@@ -637,7 +664,13 @@ $_SESSION["theses"] = $theses;
                                                 echo '<td><a class="btn btn-info" href="https://www.theses.fr/'.$these->getID().'" target="_blank">  
                                                 <i class="fas fa-eye"></i>
                                                 Consulter</a></td>';
+                                                if ($these->getEnligne()=="oui"){
+                                                    echo '<td><a class="btn btn-dark" href="https://www.theses.fr/'.$these->getID().'/document" target="_blank">  
+                                                    Télécharger</a></td>';
+                                                }
+
                                                 echo "</tr>";
+                                                
                                              
                                             }
 
