@@ -30,7 +30,7 @@ class These
     private $enligne;
     private $codeRegion;
 
-    function __construct($id, $titre, $auteur, $date, $langue, $description, $etablissement, $oai_set_specs, $embargo, $theseOnWork, $link, $director, $president, $rapportors, $members, $discipline, $status, $subjects, $accessible){
+    function __construct($id, $titre, $auteur, $date, $langue, $description, $etablissement, $oai_set_specs, $embargo, $theseOnWork, $link, $director, $president, $rapportors, $members, $discipline, $status, $subjects, $accessible, $codeReg){
         $this->id = $id;
         $this->titre = $titre;
         $this->auteur = $auteur;
@@ -50,7 +50,7 @@ class These
         $this->status = $status;
         $this->subjects = $subjects;
         $this->enligne = $accessible;
-        $this->codeRegion= $this->generateCodeRegion($etablissement);
+        $this->codeRegion= $codeReg;
         $this->allMembreJury = array(
             $director,
             $president,
@@ -60,35 +60,8 @@ class These
             
         }
 
-
-
-    public function titleORdescriptionORContainsString($string){
-        if (strpos($this->title, $string) !== false) {
-            return true;
-        }
-        if (strpos($this->description, $string) !== false) {
-            return true;
-        }
-        return false;
-    }
-
-    public function subjectsAbordedListContainsString($string){
-        foreach ($this->subjectsAborded as $subject) {
-            if (strpos($subject, $string) !== false) {
-                return true;
-            }
-        }
-        return false;
-    }
-    public function generateCodeRegion($etablissement){
-        $json = file_get_contents('../data/etablissementRegions.json');
-        $data = json_decode($json, true);
-        
-        
-        return $data[$this->$etablissement];
-    }
     public function getCodeRegion(){
-        return $codeRegion;
+        return $this->codeRegion;
     }
 
     public function getEnligne(){

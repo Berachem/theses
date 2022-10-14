@@ -37,7 +37,7 @@ function getThe10MostReccurentSubjects($theses){
         //print_r($TMPsubjects);
         foreach($TMPsubjects as $subject){
             // if the subject is not in the list, add it
-            if(in_array($subject, $subjects) && strlen($subjects) > 1){
+            if(in_array($subject, $subjects) && strlen($subject) > 2){
                 $subjects[$subject]++;
             }else{
                 $subjects[$subject] = 1;
@@ -714,10 +714,6 @@ $_SESSION["theses"] = $theses;
                                             <h6 class="m-0 font-weight-bold text-primary">Carte de France</h6>
                                         </div>
                                         <div class="card-body">
-
-                                            <?php
-                                                print_r(getRegionsCodeToEtablissementsNumber($theses));
-                                            ?>
 
                                             <script>
 

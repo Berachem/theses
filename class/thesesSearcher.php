@@ -8,6 +8,20 @@ dans les champs titre, auteur, description, etablissement, langue, discipline, s
 */
 
 
+/*
+Fonction qui renvoie le code région à partir du nom de l'établissement
+*/
+function codeRegion($nom_etablissement)
+{
+    $json = file_get_contents('data/etablissementRegions.json');
+    $data = json_decode($json, true);
+
+    return $data[$nom_etablissement];
+    
+}
+
+
+
 
 /*
 Fonction qui renvoie une note attribuée à une thèse en fonction de ses attributs contenant
@@ -103,7 +117,9 @@ function getAllThesesByAttributes($db, $motif){
                 $these->discipline,
                 $these->status,
                 $these->sujets,
-                $these->accessible
+                $these->accessible,
+                codeRegion($these->etablissements_soutenance)
+
             );
             array_push($theses, array($these, getMarkOnThese($these, $motif)));
             //array_push($theses, $these);
