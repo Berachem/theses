@@ -112,8 +112,12 @@ $_SESSION["theses"] = $theses;
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+      <script src="https://code.highcharts.com/modules/wordcloud.js"></script>
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+  
     <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     
 
 </head>
@@ -682,27 +686,74 @@ $_SESSION["theses"] = $theses;
                     <!-- Content Row -->
                     <div class="row">
                             <!-- Approach -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">
-                                        Sujets les plus abordés
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <p>
-                                        <?php
-                                            // array of ten different colors
-                                            $colors = array("#1cc88a", "#36b9cc", "#f6c23e", "#e74a3b", "#858796", "#5a5c69", "#2e59d9", "#17a673", "#2c9faf");
-                            
-                                            // create badges for each key subject most aborded
-                                            $subjects = getThe10MostReccurentSubjects($theses);
-                                            foreach (array_keys($subjects) as $subject) {
-                                                echo '<span class="badge badge-primary" style="background-color:'.$colors[array_rand($colors)].'">'.$subject.'</span> ';
-                                            }
-                                        ?>
+                        <div class="col-xl-8 col-lg-7">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            Nuage de mots
+                                        </h6>
+                                    </div>
+                                   
+                                   
+                                             <?php
+                                                
+                                                // fonction anonyme qui affiche la concaténation de tous les sujets de thèses str_replace("'", "\'", 
+                                                echo "'".implode(",", array_map(function($these) { return $these->getSubjects(); }, array_slice($theses, 0,10)))."'";
+                                               
+                                            ?>
+                                  
+                                    <div class="card-body">
+                                        
+                                    <script>
+                                            const text ="salut c'est moi",
+                                            
+                                            lines = text.replace(/[():'?0-9]+/g, '').split(/[,\. ]+/g),
+                                                data = lines.reduce((arr, word) => {
+                                                    let obj = Highcharts.find(arr, obj => obj.name === word);
+                                                    if (obj) {
+                                                        obj.weight += 1;
+                                                    } else {
+                                                        obj = {
+                                                            name: word,
+                                                            weight: 1
+                                                        };
+                                                        arr.push(obj);
+                                                    }
+                                                    return arr;
+                                                }, []);
 
-                                    </p>
-   
+                                            Highcharts.chart('nuage', {
+                                                accessibility: {
+                                                    screenReaderSection: {
+                                                        beforeChartFormat: '<h5>{chartTitle}</h5>' +
+                                                            '<div>{chartSubtitle}</div>' +
+                                                            '<div>{chartLongdesc}</div>' +
+                                                            '<div>{viewTableButton}</div>'
+                                                    }
+                                                },
+                                                series: [{
+                                                    type: 'wordcloud',
+                                                    data,
+                                                    name: 'Occurrences'
+                                                }],
+                                                title: {
+                                                    text: 'Wordcloud of Alice\'s Adventures in Wonderland'
+                                                },
+                                                subtitle: {
+                                                    text: 'An excerpt from chapter 1: Down the Rabbit-Hole  '
+                                                },
+                                                tooltip: {
+                                                    headerFormat: '<span style="font-size: 16px"><b>{point.key}</b></span><br>'
+                                                }
+                                            });
+
+                                    </script>
+                                        
+                                           <figure class="highcharts-figure">
+                                                <div id="nuage"></div>
+                                            </figure>
+    
+                                    </div>
                                 </div>
                             </div>
 
