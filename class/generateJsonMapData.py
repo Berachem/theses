@@ -1,6 +1,12 @@
+"""
+Fichier qui génère une partie du fichier json 
+reliant un établissement avec son code région (à trois lettres)
+qui servira pour la carte intéractive.
+"""
+
 import json
 
-# array linking cities to regions codes
+# Quelques data utiles pour la génération du json
 villesRegions = {
  "Paris": "Île-de-France",
  "Marseille": "Provence-Alpes-Côte d'Azur",
@@ -146,31 +152,33 @@ def generateJsonMapData():
               encoding="utf8") as json_file, open('etablissementRegions.json',
                                                   'w',
                                                   encoding="utf8") as f:
-        #print(json_file)
+        # json to dict
         mapData = json.load(json_file)
-        # print all etablissement names in json file
-        #print(mapData)
-        not_parcoured = list(map(lambda x : x['etablissements_soutenance'][0]["nom"], mapData))
+        not_parcoured = list(set(map(lambda x : x['etablissements_soutenance'][0]["nom"], mapData)))
         for etablissement in mapData:
-            #print(etablissement)
-            #print(etablissement['etablissements_soutenance'][0]["nom"])
+            
             for ville in villesRegions:
-                #print(ville)
+                # si l'établissement est dans la liste de ceux dont on a pas attribué de code région
                 if etablissement['etablissements_soutenance'][0]["nom"] in not_parcoured:
-                    
-                    #print(ville+" ----- "+etablissement['etablissements_soutenance'][0]["nom"])
-                    
+                    # si le nom d'une ville est inclu dans le nom de l'établissement 
+                    # ex : Paris 6 -> IDF
                     if ville.lower() in etablissement['etablissements_soutenance'][0]["nom"].lower():
                         print(etablissement['etablissements_soutenance'][0]["nom"].lower()+" ------> "+ville.upper())
                         f.write('"' + etablissement['etablissements_soutenance'][0]["nom"] +
                                 '":"' + regionCode[villesRegions[ville]] + '",')
+                        not_parcoured.remove(etablissement['etablissements_soutenance'][0]["nom"])
                         
                         
 
-    #print(mapData)
-                    f.write('\n')
-        not_parcoured.remove(etablissement['etablissements_soutenance'][0]["nom"])
+                        f.write('\n')
+            
+        f.write('\n')
+        # on ajoute les établissements qui n'ont pas trouvé de code région
+        for eta in set(not_parcoured):
+            f.write('"' + eta + '":"' + 'NULL' + '",')
+            f.write('\n')
         f.write('}')
+        
 
 
 generateJsonMapData()
