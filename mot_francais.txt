@@ -7,4 +7,20 @@ France
 terre
 azote
 eau
+oxygène
+hydrogène
+sodium
+potassium
+chlorure
+sulfate
+phosphate
+carbonate
+nitrate
+atome
+proton
+neutron
+électron
+nucléon
+nucléaire
+
 

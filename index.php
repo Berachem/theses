@@ -4,6 +4,29 @@ require_once 'class/Connexion.php';
 session_start();
 
 /*
+* Renvoie une liste associant un code région (ex: fr-idf, fr-ara...)
+* à son nombre d'occurences dans un fichier json
+*/
+function getRegionsCodeToEtablissementsNumber($theses){
+    $regionsCodeToEtablissementsNumber = array();
+    foreach ($theses as $these) {
+        echo $these->getCodeRegion()."<br>";
+        $regionCode = 'fr-'.strtolower($these->getCodeRegion());
+        if (array_key_exists($regionCode, $regionsCodeToEtablissementsNumber)) {
+            $regionsCodeToEtablissementsNumber[$regionCode] += 1;
+        }else{
+            $regionsCodeToEtablissementsNumber[$regionCode] = 1;
+        }
+    }
+    //print_r($regionsCodeToEtablissementsNumber);
+    return $regionsCodeToEtablissementsNumber;
+}
+
+
+
+
+
+/*
  * Renvoie les 10 premiers sujets abordés les plus récurrents
  */
 function getThe10MostReccurentSubjects($theses){
@@ -11,9 +34,10 @@ function getThe10MostReccurentSubjects($theses){
     foreach($theses as $these){
         // split the subjects string into list
         $TMPsubjects = explode(",", $these->getSubjects());
+        //print_r($TMPsubjects);
         foreach($TMPsubjects as $subject){
             // if the subject is not in the list, add it
-            if(in_array($subject, $subjects)){
+            if(in_array($subject, $subjects) && strlen($subjects) > 1){
                 $subjects[$subject]++;
             }else{
                 $subjects[$subject] = 1;
@@ -88,6 +112,8 @@ $_SESSION["theses"] = $theses;
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
     
 
 </head>
@@ -459,8 +485,8 @@ $_SESSION["theses"] = $theses;
                                     }
 
                             ?>
-                        <a href="class/extract_theses.json" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Download JSON</a>
+                        <a href="data/extract_theses.json" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Consulter le fichier JSON</a>
                     </div>
 
                     <!-- Content Row -->
@@ -601,13 +627,13 @@ $_SESSION["theses"] = $theses;
                                    if (isset($_GET["chart"])){
                                     $_SESSION["chart"] = $_GET["chart"];
                                     if ($_GET["chart"] == "year") {
-                                        echo '<a href="index.php?search='.$motif.'&chart=month" class ="btn btn-dark">Voir par mois</a>';
+                                        echo '<a href="index.php?search='.$motif.'&chart=month" class ="btn" style="background-color: black; color : white">Voir par mois</a>';
                                     } else {
-                                        echo '<a href="index.php?search='.$motif.'&chart=year" class ="btn btn-dark">Voir par années</a>';
+                                        echo '<a href="index.php?search='.$motif.'&chart=year" class ="btn" style="background-color: black; color : white">Voir par années</a>';
                                     }
                         
                                    }else{
-                                    echo '<a href="index.php?search='.$motif.'&chart=month" class ="btn btn-dark">Voir par mois</a>';
+                                    echo '<a href="index.php?search='.$motif.'&chart=month" class ="btn style="background-color: black; color : white">Voir par mois</a>';
 
                                    }
                                     ?>
@@ -680,10 +706,101 @@ $_SESSION["theses"] = $theses;
                                 </div>
                             </div>
 
+                            <div class="col-xl-4 col-lg-5">
 
+                                <!-- Illustrations -->
+                                <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Carte de France</h6>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <?php
+                                                print_r(getRegionsCodeToEtablissementsNumber($theses));
+                                            ?>
+
+                                            <script>
+
+                                                (async () => {
+
+                                                const topology = await fetch(
+                                                    'https://code.highcharts.com/mapdata/countries/fr/fr-all.topo.json'
+                                                ).then(response => response.json());
+
+                                                // Prepare demo data. The data is joined to map using value of 'hc-key'
+                                                // property by default. See API docs for 'joinBy' for more info on linking
+                                                // data and map.
+                                                const data = [
+                                                    <?php
+                                                        foreach(getRegionsCodeToEtablissementsNumber($theses) as $region => $number){
+                                                            echo "['".$region."',".$number."],";
+                                                        }
+                                                    ?>
+
+                                                ];
+
+                                                // Create the chart
+                                                Highcharts.mapChart('france-map', {
+                                                    chart: {
+                                                        map: topology
+                                                    },
+
+                                                    title: {
+                                                        text: 'Carte Intéractive'
+                                                    },
+
+                                                    subtitle: {
+                                                        text: 'Régions de <a href="http://code.highcharts.com/mapdata/countries/fr/fr-all.topo.json">France</a>'
+                                                    },
+
+                                                    mapNavigation: {
+                                                        enabled: true,
+                                                        buttonOptions: {
+                                                            verticalAlign: 'bottom'
+                                                        }
+                                                    },
+
+                                                    colorAxis: {
+                                                        min: 0
+                                                    },
+
+                                                    series: [{
+                                                        data: data,
+                                                        name: 'Nombre de Thèses',
+                                                        states: {
+                                                            hover: {
+                                                                color: 'red'
+                                                            }
+                                                            
+                                                        },
+                                                        dataLabels: {
+                                                            enabled: true,
+                                                            format: '{point.name}'
+                                                        }
+                                                    }]
+                                                });
+
+                                                })();
+
+
+                                            </script>
+                                            <div id="france-map"></div>
+                                            <!--
+                                            <p>Add some quality, svg illustrations to your project courtesy of <a
+                                                    target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
+                                                constantly updated collection of beautiful svg images that you can use
+                                                completely free and without attribution!</p>
+                                                                            -->
+                                        </div>
+                                </div>
+
+                             </div>
+                     </div>
+                     </div>
+                    
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Quelques thèses</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">TOP 10 des thèses les plus pertinentes</h6>
                     </div>
                     <div class="card-body">
                             <div class="table-responsive">
@@ -706,7 +823,7 @@ $_SESSION["theses"] = $theses;
                                     </thead>
                                     <tbody>
                                         <?php
-                                            $SliceTheses = $theses;
+                                            $SliceTheses = array_slice($theses,0,10);
                                             foreach($SliceTheses as $these){
                                                 echo "<tr>";
                                                 echo "<td> <i>".$these->getID()."</i></td>";
@@ -857,30 +974,7 @@ $_SESSION["theses"] = $theses;
 
                         </div>
 
-                        <div class="col-lg-6 mb-4">
-
-                            <!-- Illustrations -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-center">
-                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                            src="img/undraw_posting_photo.svg" alt="...">
-                                    </div>
-                                    <p>Add some quality, svg illustrations to your project courtesy of <a
-                                            target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                        constantly updated collection of beautiful svg images that you can use
-                                        completely free and without attribution!</p>
-                                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                        unDraw &rarr;</a>
-                                </div>
-                            </div>
-
-
-
-                        </div>
+                       
                     </div>
 
                 </div>
@@ -936,6 +1030,7 @@ $_SESSION["theses"] = $theses;
     </div>
     
 
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -950,6 +1045,7 @@ $_SESSION["theses"] = $theses;
   
     <script src="vendor/chart.js/Chart.min.js"></script>
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+
 
 <?php
     include("js/chart-pie.php");

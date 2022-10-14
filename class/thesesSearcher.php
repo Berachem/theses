@@ -7,6 +7,33 @@ dans les champs titre, auteur, description, etablissement, langue, discipline, s
 
 */
 
+
+
+/*
+Fonction qui renvoie une note attribuée à une thèse en fonction de ses attributs contenant
+le motif de recherché
+*/
+function getMarkOnThese($these, $motif){
+    $mark = 1;
+    if (strpos($these->getTitre(), $motif) != false) {
+        $mark += 10;
+    }
+    if (strpos($these->getSubjects(), $motif) != false) {
+        $mark += 5;
+    }
+    if (strpos($these->getAuteur(), $motif) != false) {
+        $mark += 5;
+    }
+    if (strpos($these->getDescription(), $motif) != false) {
+        $mark += 4;
+    }
+    return $mark;
+}
+
+
+/*
+Fonction qui renvoie la liste des thèses en recherchant dans la base de données Un motif
+*/
 function getAllThesesByAttributes($db, $motif){
         // On recherche tous les thèses qui correspondent à la recherche
         $theses = array();
@@ -78,11 +105,22 @@ function getAllThesesByAttributes($db, $motif){
                 $these->sujets,
                 $these->accessible
             );
-            array_push($theses, $these);
+            array_push($theses, array($these, getMarkOnThese($these, $motif)));
+            //array_push($theses, $these);
+            // on ajoute la these avec sa note liée en fonction de sa pertinence
+            //$theses[$these] = getMarkOnThese($these, $motif);
+
+            //print_r($theses);
+
+
+            
         }
-    
-        
-        return $theses;
+        //print_r($theses);
+        //exit();
+        arsort($theses);
+        //return array_keys($theses);
+        return array_map(function($these) { return $these[0]; }, $theses);
+        //return $theses;
 }
 
 ?>

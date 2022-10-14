@@ -113,7 +113,7 @@ function insertAllData($id, $titre, $auteur, $date, $langue, $description, $etab
 
 
 // Décodage d'un fichier JSON Récupère une chaîne encodée JSON et la convertit en une variable PHP
-$json = file_get_contents('extract_theses.json');
+$json = file_get_contents('../data/extract_theses.json');
 $data = json_decode($json, true);
 
 // parcours des thèses

@@ -47,6 +47,21 @@
   box-sizing: border-box;
 }
 
+
+
+#france-map {
+  height: 500px;
+  min-width: 310px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.loading {
+  margin-top: 10em;
+  text-align: center;
+  color: gray;
+}
+
 html {
   font-family: sans-serif;
   line-height: 1.15;

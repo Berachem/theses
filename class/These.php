@@ -28,6 +28,7 @@ class These
     private $subjects;
     private $allMembreJury;
     private $enligne;
+    private $codeRegion;
 
     function __construct($id, $titre, $auteur, $date, $langue, $description, $etablissement, $oai_set_specs, $embargo, $theseOnWork, $link, $director, $president, $rapportors, $members, $discipline, $status, $subjects, $accessible){
         $this->id = $id;
@@ -49,6 +50,7 @@ class These
         $this->status = $status;
         $this->subjects = $subjects;
         $this->enligne = $accessible;
+        $this->codeRegion= $this->generateCodeRegion($etablissement);
         $this->allMembreJury = array(
             $director,
             $president,
@@ -77,6 +79,16 @@ class These
             }
         }
         return false;
+    }
+    public function generateCodeRegion($etablissement){
+        $json = file_get_contents('../data/etablissementRegions.json');
+        $data = json_decode($json, true);
+        
+        
+        return $data[$this->$etablissement];
+    }
+    public function getCodeRegion(){
+        return $codeRegion;
     }
 
     public function getEnligne(){

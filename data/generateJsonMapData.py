@@ -148,7 +148,7 @@ regionCode = {
 # generate json file from a previous one
 def generateJsonMapData():
     # open json file
-    with open('extract_theses.json', 'r',
+    with open('data/extract_theses.json', 'r',
               encoding="utf8") as json_file, open('etablissementRegions.json',
                                                   'w',
                                                   encoding="utf8") as f:
