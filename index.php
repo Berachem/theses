@@ -10,7 +10,7 @@ session_start();
 function getRegionsCodeToEtablissementsNumber($theses){
     $regionsCodeToEtablissementsNumber = array();
     foreach ($theses as $these) {
-        echo $these->getCodeRegion()."<br>";
+        //echo $these->getCodeRegion()."<br>";
         $regionCode = 'fr-'.strtolower($these->getCodeRegion());
         if (array_key_exists($regionCode, $regionsCodeToEtablissementsNumber)) {
             $regionsCodeToEtablissementsNumber[$regionCode] += 1;
