@@ -665,20 +665,8 @@ $_SESSION["theses"] = $theses;
                                 <div class="card-body">
                                     <p>
                                         <?php
-                                            // array of ten colors
-                                            $colors = array(
-                                                "#4e73df",
-                                                "#1cc88a",
-                                                "#36b9cc",
-                                                "#f6c23e",
-                                                "#e74a3b",
-                                                "#858796",
-                                                "#0022FF",
-                                                "#2e59d9",
-                                                "#17a673",
-                                                "#2c9faf",
-                                                "#f6c23e",
-                                                "#e74a3b");
+                                            // array of ten different colors
+                                            $colors = array("#1cc88a", "#36b9cc", "#f6c23e", "#e74a3b", "#858796", "#5a5c69", "#2e59d9", "#17a673", "#2c9faf");
                             
                                             // create badges for each key subject most aborded
                                             $subjects = getThe10MostReccurentSubjects($theses);
