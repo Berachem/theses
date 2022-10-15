@@ -114,10 +114,11 @@ $_SESSION["theses"] = $theses;
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-      <script src="https://code.highcharts.com/modules/wordcloud.js"></script>
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-  
-    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/networkgraph.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     
@@ -697,63 +698,76 @@ $_SESSION["theses"] = $theses;
                                     </div>
                                    
                                    
-                                             <?php
-                                                
-                                                // fonction anonyme qui affiche la concaténation de tous les sujets de thèses str_replace("'", "\'", 
-                                                echo "'".implode(",", array_map(function($these) { return $these->getSubjects(); }, array_slice($theses, 0,10)))."'";
-                                               
-                                            ?>
+                                             
                                   
                                     <div class="card-body">
-                                        
+                         
+
+
+
+                                    <figure class="highcharts-figure">
+                                    <div id="nuage"></div>
+                                    <p>
+                                   <?php
+                                     $sujets = "'".implode(",", array_map(function($these) { return $these->getSubjects(); }, array_slice($theses, 0,10)))."'";
+                                        echo $sujets;
+                                   ?>
+                                </p>
+
+                                    </figure>
+
+
                                     <script>
-                                            const text ="salut c'est moi",
+                                           
                                             
+                                            const text =
+                                            <?php   
+                                                echo $sujets;
+                                            ?>,
                                             lines = text.replace(/[():'?0-9]+/g, '').split(/[,\. ]+/g),
-                                                data = lines.reduce((arr, word) => {
-                                                    let obj = Highcharts.find(arr, obj => obj.name === word);
-                                                    if (obj) {
-                                                        obj.weight += 1;
-                                                    } else {
-                                                        obj = {
-                                                            name: word,
-                                                            weight: 1
-                                                        };
-                                                        arr.push(obj);
-                                                    }
-                                                    return arr;
-                                                }, []);
+                                            data = lines.reduce((arr, word) => {
+                                                let obj = Highcharts.find(arr, obj => obj.name === word);
+                                                if (obj) {
+                                                obj.weight += 1;
+                                                } else {
+                                                obj = {
+                                                    name: word,
+                                                    weight: 1
+                                                };
+                                                arr.push(obj);
+                                                }
+                                                return arr;
+                                            }, []);
 
                                             Highcharts.chart('nuage', {
-                                                accessibility: {
-                                                    screenReaderSection: {
-                                                        beforeChartFormat: '<h5>{chartTitle}</h5>' +
-                                                            '<div>{chartSubtitle}</div>' +
-                                                            '<div>{chartLongdesc}</div>' +
-                                                            '<div>{viewTableButton}</div>'
-                                                    }
-                                                },
-                                                series: [{
-                                                    type: 'wordcloud',
-                                                    data,
-                                                    name: 'Occurrences'
-                                                }],
-                                                title: {
-                                                    text: 'Wordcloud of Alice\'s Adventures in Wonderland'
-                                                },
-                                                subtitle: {
-                                                    text: 'An excerpt from chapter 1: Down the Rabbit-Hole  '
-                                                },
-                                                tooltip: {
-                                                    headerFormat: '<span style="font-size: 16px"><b>{point.key}</b></span><br>'
+                                            accessibility: {
+                                                screenReaderSection: {
+                                                beforeChartFormat: '<h5>{chartTitle}</h5>' +
+                                                    '<div>{chartSubtitle}</div>' +
+                                                    '<div>{chartLongdesc}</div>' +
+                                                    '<div>{viewTableButton}</div>'
                                                 }
+                                            },
+                                            series: [{
+                                                type: 'wordcloud',
+                                                data,
+                                                name: 'Occurrences'
+                                            }],
+                                            title: {
+                                                text: 'Nuage de mots'
+                                            },
+                                            subtitle: {
+                                                text: 'L\'ensemble de tous les sujets des thèses'
+                                            },
+                                            tooltip: {
+                                                headerFormat: '<span style="font-size: 16px"><b>{point.key}</b></span><br>'
+                                            }
                                             });
 
                                     </script>
                                         
-                                           <figure class="highcharts-figure">
-                                                <div id="nuage"></div>
-                                            </figure>
+                                        
+                                    
     
                                     </div>
                                 </div>
@@ -910,50 +924,121 @@ $_SESSION["theses"] = $theses;
                             </div>
                         </div>
                     </div>
-                
-                        <!-- Content Column -->
+                    
+                        <!-- 
                         <div class="col-lg-6 mb-4">
 
-                            <!-- Project Card Example -->
+                            
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Réseaux</h6>
                                 </div>
                                 <div class="card-body">
-                                    <h4 class="small font-weight-bold">Server Migration <span
-                                            class="float-right">20%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Sales Tracking <span
-                                            class="float-right">40%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Customer Database <span
-                                            class="float-right">60%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar" role="progressbar" style="width: 60%"
-                                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Payout Details <span
-                                            class="float-right">80%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Account Setup <span
-                                            class="float-right">Complete!</span></h4>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
+                        
+                                    <figure class="highcharts-figure">
+                                        <div id="reseau"></div>
+                             
+                                    </figure>
+
+                                    <script>
+                                        // Add the nodes option through an event call. We want to start with the parent
+                                        // item and apply separate colors to each child element, then the same color to
+                                        // grandchildren.
+                                        Highcharts.addEvent(
+                                        Highcharts.Series,
+                                        'afterSetOptions',
+                                        function (e) {
+                                            var colors = Highcharts.getOptions().colors,
+                                            i = 0,
+                                            nodes = {};
+
+                                            if (
+                                            this instanceof Highcharts.seriesTypes.networkgraph &&
+                                            e.options.id === 'lang-tree'
+                                            ) {
+                                            e.options.data.forEach(function (link) {
+
+                                                if (link[0] === 'Proto Indo-European') {
+                                                nodes['Proto Indo-European'] = {
+                                                    id: 'ddddd',
+                                                    marker: {
+                                                    radius: 20
+                                                    }
+                                                };
+                                                nodes[link[1]] = {
+                                                    id: link[1],
+                                                    marker: {
+                                                    radius: 10
+                                                    },
+                                                    color: colors[i++]
+                                                };
+                                                } else if (nodes[link[0]] && nodes[link[0]].color) {
+                                                nodes[link[1]] = {
+                                                    id: link[1],
+                                                    color: nodes[link[0]].color
+                                                };
+                                                }
+                                            });
+
+                                            e.options.nodes = Object.keys(nodes).map(function (id) {
+                                                return nodes[id];
+                                            });
+                                            }
+                                        }
+                                        );
+
+                                        Highcharts.chart('reseau', {
+                                        chart: {
+                                            type: 'networkgraph',
+                                            height: '100%'
+                                        },
+                                        title: {
+                                            text: 'Réseau des personnes en lien entre-elles à travers les différents thèses'
+                                        },
+                                        subtitle: {
+                                            text: 'A Force-Directed Network Graph in Highcharts'
+                                        },
+                                        plotOptions: {
+                                            networkgraph: {
+                                            keys: ['from', 'to'],
+                                            layoutAlgorithm: {
+                                                enableSimulation: true,
+                                                friction: -0.9
+                                            }
+                                            }
+                                        },
+                                        series: [{
+                                            accessibility: {
+                                            enabled: false
+                                            },
+                                            dataLabels: {
+                                            enabled: true,
+                                            linkFormat: ''
+                                            },
+                                            id: 'lang-tree',
+                                            data: [
+                                            <?php
+                                            /*
+                                            foreach($theses as $these){
+                                                foreach(array_merge($these->getAllMembreJury()) as $pers){
+                                                    echo "['".$these->getAuteur()."', '".$pers. "'],";
+                                                }
+                                            }
+
+                                            */
+                                            ?>
+                                        
+                                            ]
+                                        }]
+                                        });
+
+                                    </script>
+
                                 </div>
                             </div>
+                                    
 
-                            <!-- Color System -->
+                           
                             <div class="row">
                                 <div class="col-lg-6 mb-4">
                                     <div class="card bg-primary text-white shadow">
@@ -1020,6 +1105,8 @@ $_SESSION["theses"] = $theses;
                                     </div>
                                 </div>
                             </div>
+
+                            -->
 
                         </div>
 
