@@ -71,7 +71,9 @@ if (isset($_GET["random"])){
 }
 
 include('class/thesesSearcher.php');
-$db = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
+
+// get words in file secret.txt
+include('Connexion.php');
 
 if (!isset($_GET['search'])) {
     $motif = "";

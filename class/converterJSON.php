@@ -1,5 +1,5 @@
 <?php
-require_once 'Connexion.php';
+
 
 
 /*
@@ -46,7 +46,8 @@ function insertAllData($id, $titre, $auteur, $date, $langue, $description, $etab
     
     // CONNEXION A LA BASE DE DONNEES
     // OBLIGATOIRE
-    $db = new Connexion('vwryeacbera.mysql.db', 'vwryeacbera','vwryeacbera', 'Cherine93' );
+    include('Connexion.php');
+    
 
     $db->q(
         'INSERT INTO theses VALUES ("0", :id, :titre, :auteur, :date, :langue, :description, :etablissement, :oai_set_specs, :embargo, :theseOnWork, :link, :discipline, :status, :subjects, :enligne)',
