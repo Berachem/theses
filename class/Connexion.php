@@ -56,6 +56,15 @@ class Connexion {
 
 
 }
+use These\DotEnv;
+
+include "lib/parse.env.php";
+(new DotEnv(__DIR__ . '../.env'))->load();
+// mysql:host=localhost;dbname=test;
+
+
+$db = new Connexion(getenv('DB_HOST'),getenv('DB_NAME'),getenv('DB_USER'),getenv('DB_PASSWORD'));
+
 /*
 
 $r = new Connexion('autoformation');
