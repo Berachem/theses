@@ -72,8 +72,6 @@ if (isset($_GET["random"])){
 
 include('class/thesesSearcher.php');
 
-// get words in file secret.txt
-include('Connexion.php');
 
 if (!isset($_GET['search'])) {
     $motif = "";
