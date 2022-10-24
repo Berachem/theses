@@ -1,6 +1,6 @@
 <?php
-require_once 'class/These.php';
-require_once 'class/Connexion.php';
+require_once 'php/These.php';
+require_once 'php/Connexion.php';
 session_start();
 
 /*
@@ -70,7 +70,7 @@ if (isset($_GET["random"])){
     header('Location: index.php?search='.$randomWord);
 }
 
-include('class/thesesSearcher.php');
+include('php/thesesSearcher.php');
 
 
 if (!isset($_GET['search'])) {
