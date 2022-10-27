@@ -118,7 +118,7 @@ $_SESSION["theses"] = $theses;
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
     <script src="https://code.highcharts.com/modules/networkgraph.js"></script>
@@ -1059,7 +1059,7 @@ $_SESSION["theses"] = $theses;
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="js/script.min.js"></script>
 
     <!-- Page level plugins -->
   
