@@ -592,7 +592,8 @@ $_SESSION["theses"] = $theses;
                                     <div id="nuage"></div>
                                     <p>
                                    <?php
-                                     $sujets = "'".implode(",", array_map(function($these) { return $these->getSubjects(); }, array_slice($theses, 0,10)))."'";
+                                      // On concatène tous les sujets des thèses
+                                     $sujets = "'".implode(",", array_filter(array_map(function($these) { return $these->getSubjects(); }, array_slice($theses, 0,10))))."'";
                                         echo $sujets;
                                    ?>
                                 </p>
