@@ -523,7 +523,7 @@ $_SESSION["theses"] = $theses;
                                     }
                         
                                    }else{
-                                    echo '<a href="index.php?search='.$motif.'&chart=month" class ="btn style="background-color: black; color : white">Voir par mois</a>';
+                                    echo '<a href="index.php?search='.$motif.'&chart=month" class ="btn" style="background-color: black; color : white">Voir par mois</a>';
 
                                    }
                                     ?>
