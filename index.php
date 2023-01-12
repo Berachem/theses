@@ -91,7 +91,21 @@ if (isset($_GET["search"])) {
 $theses = getAllThesesByAttributes($db, $motif);
 $_SESSION["theses"] = $theses;
 
+// Récupération du nombre de directeurs
+$nbDirectors = 0;
+foreach ($theses as $these) {
+    $nbDirectors += sizeof($these->getDirector());
+}
 
+// On concatène tous les sujets des thèses
+$sujets = strtolower("'".implode(",", array_filter(array_map(function($these) { return $these->getSubjects(); }, array_slice($theses, 0,10))))."'");
+
+
+// for each StopWords_French.stopwords array, we remove it from the subjects
+/* $stopWords = StopWords_French::stopwords();
+foreach($stopWords as $stopWord){
+    $sujets = str_replace($stopWord, "", $sujets);
+} */
 
 ?>
 
@@ -389,13 +403,7 @@ $_SESSION["theses"] = $theses;
                                                 Nombre de directeurs de thèses</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                  <?php 
-                                                    $nbDirectors = 0;
-                                                    foreach ($theses as $these) {
-                                                        $nbDirectors += sizeof($these->getDirector());
-                                                    }
                                                     echo $nbDirectors;
-                                                 
-                                                 
                                                  ?>
                                             </div>
                                         </div>
@@ -431,7 +439,7 @@ $_SESSION["theses"] = $theses;
                                                  ?> thèses
                                                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
                                                         <?php
-                                                            echo round($nbTheseEnligne / sizeof($theses) * 100);
+                                                            echo sizeof($theses) != 0 ? round($nbTheseEnligne / sizeof($theses) * 100) : 0;
                                                         ?>%
                                                         
                                                     </div>
@@ -440,10 +448,10 @@ $_SESSION["theses"] = $theses;
                                                     <div class="progress progress-sm mr-2">
                                                         <div class="progress-bar bg-info" role="progressbar"
                                                             style="width: <?php
-                                                                echo round($nbTheseEnligne / sizeof($theses) * 100);
+                                                                echo sizeof($theses) != 0 ? round($nbTheseEnligne / sizeof($theses) * 100) : 0;
                                                             ?>%" aria-valuenow="
                                                             <?php
-                                                                echo round($nbTheseEnligne / sizeof($theses) * 100);
+                                                                echo sizeof($theses) != 0 ? round($nbTheseEnligne / sizeof($theses) * 100) : 0;
                                                             ?>
                                                         " aria-valuemin="0"
                                                             aria-valuemax="100"></div>
@@ -569,8 +577,6 @@ $_SESSION["theses"] = $theses;
                                     <div id="nuage"></div>
                                     <p>
                                    <?php
-                                      // On concatène tous les sujets des thèses
-                                     $sujets = "'".implode(",", array_filter(array_map(function($these) { return $these->getSubjects(); }, array_slice($theses, 0,10))))."'";
                                         echo $sujets;
                                    ?>
                                 </p>
