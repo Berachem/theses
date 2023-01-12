@@ -2,6 +2,7 @@
 
 require_once 'php/These.php';
 require_once 'php/Connexion.php';
+require_once 'php/stopWords.php';
 
 
 
@@ -67,6 +68,18 @@ function getNumberDistinctEtablissements($theses){
     return count($etablissements);
 }
 
+function getSubjectsTextForCloud($theses){
+    $sujets = strtolower("'".implode(",", array_filter(array_map(function($these) { return $these->getSubjects(); }, array_slice($theses, 0,10))))."'");
+
+    // for each StopWords_French.stopwords array, we remove it from the subjects
+    $stopWords = StopWords_French::stopwords();
+    foreach($stopWords as $stopWord){
+        // remove the stopword from the subjects only if it is not in the middle of a word
+        $sujets = preg_replace("/\b$stopWord\b/i", "", $sujets);
+    }
+    return $sujets;
+}
+
 if (isset($_GET["random"])){
     //On prend un mot aléatoire dans un fichier texte
     $words = file('mot_francais.txt');
@@ -98,14 +111,8 @@ foreach ($theses as $these) {
 }
 
 // On concatène tous les sujets des thèses
-$sujets = strtolower("'".implode(",", array_filter(array_map(function($these) { return $these->getSubjects(); }, array_slice($theses, 0,10))))."'");
+$sujets = getSubjectsTextForCloud($theses);
 
-
-// for each StopWords_French.stopwords array, we remove it from the subjects
-/* $stopWords = StopWords_French::stopwords();
-foreach($stopWords as $stopWord){
-    $sujets = str_replace($stopWord, "", $sujets);
-} */
 
 ?>
 
@@ -576,9 +583,7 @@ foreach($stopWords as $stopWord){
                                     <figure class="highcharts-figure">
                                     <div id="nuage"></div>
                                     <p>
-                                   <?php
-                                        echo $sujets;
-                                   ?>
+                                   
                                 </p>
 
                                     </figure>
