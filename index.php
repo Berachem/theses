@@ -110,7 +110,7 @@ $_SESSION["theses"] = $theses;
     <link rel="icon" type="image/png" href="img/book.png" />
 
     <title>Thèses.fr </title>
-
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -284,32 +284,11 @@ $_SESSION["theses"] = $theses;
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                        <div class="small text-gray-500">26 octobre 2003</div>
+                                        <span class="font-weight-bold">Les alertes ne sont pas encore implémentées.</span>
                                     </div>
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
+       
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Voir plus</a>
                             </div>
                         </li>
@@ -320,9 +299,7 @@ $_SESSION["theses"] = $theses;
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">par Berachem MARKRIA</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/moi.png">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Berachem MARKRIA</span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -375,15 +352,15 @@ $_SESSION["theses"] = $theses;
                                     }
 
                             ?>
-                        <a href="data/extract_theses.json" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Consulter le fichier JSON</a>
+                        <a href="https://www.theses.fr/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-eye fa-sm text-white-50"></i> Consulter le site officiel</a>
                     </div>
 
                     <!-- Content Row -->
                     <div class="row">
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-right">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -403,7 +380,7 @@ $_SESSION["theses"] = $theses;
                         </div>
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-down">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -431,7 +408,7 @@ $_SESSION["theses"] = $theses;
                         </div>
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-down">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -483,7 +460,7 @@ $_SESSION["theses"] = $theses;
                         </div>
 
                         <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-left">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -506,7 +483,7 @@ $_SESSION["theses"] = $theses;
                     <div class="row">
 
                         <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
+                        <div class="col-xl-8 col-lg-7" data-aos="fade-right">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div
@@ -538,7 +515,7 @@ $_SESSION["theses"] = $theses;
                         </div>
 
                         <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
+                        <div class="col-xl-4 col-lg-5" data-aos="fade-left">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div
@@ -572,7 +549,7 @@ $_SESSION["theses"] = $theses;
                     <!-- Content Row -->
                     <div class="row">
                             <!-- Approach -->
-                        <div class="col-xl-8 col-lg-7">
+                        <div class="col-xl-8 col-lg-7" data-aos="fade-right">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
                                         <h6 class="m-0 font-weight-bold text-primary">
@@ -657,7 +634,7 @@ $_SESSION["theses"] = $theses;
                                 </div>
                             </div>
 
-                            <div class="col-xl-4 col-lg-5">
+                            <div class="col-xl-4 col-lg-5" data-aos="fade-left">
 
                                 <!-- Illustrations -->
                                 <div class="card shadow mb-4">
@@ -1013,8 +990,20 @@ $_SESSION["theses"] = $theses;
                                 $curYear = date('Y'); 
                                 echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
                                 ?> By Berachem MARKRIA</span>
-                    </div>
+                        <span>
+                            |
+                            <a href="https://www.theses.fr/" class="text-dark">Site officiel</a>
+                            |
+                            <a href="https://github.com/Berachem/theses" class="text-dark">Code Source</a>
+                            |
+                            <a href="https://www.cnil.fr/" class="text-dark">CNIL</a>
+                            |
+                            <a href="" class="text-dark">Accueil</a>
+                            |
+                            <a href="mailto:berachem.markria@gmail.com" class="text-dark">Contact</a>
+                        </span>
                 </div>
+
             </footer>
             <!-- End of Footer -->
 
@@ -1065,6 +1054,11 @@ $_SESSION["theses"] = $theses;
   
     <script src="vendor/chart.js/Chart.min.js"></script>
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 
 
 <?php
