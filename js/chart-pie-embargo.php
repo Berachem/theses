@@ -2,24 +2,21 @@
 session_start();
 $theses = $_SESSION["theses"];
 
-$FRlanguageNumber = 0;
-$ENlanguageNumber = 0;
-$ENFRlanguageNumber = 0;
-$otherLanguageNumber = 0;
+$thesesSousEmbargo = 0;
+$thesesNonSousEmbargo = 0;
 
 
 foreach($theses as $these){
-    if($these->getLangue() == "fr"){
-        $FRlanguageNumber++;
+    $embargo = $these->getEmbargo();
+
+    if($embargo != null && $embargo < date("Y-m-d")){
+        $thesesSousEmbargo++;
     }
-    elseif($these->getLangue() == "en"){
-        $ENlanguageNumber++;
+    else{
+        $thesesNonSousEmbargo++;
     }
-    elseif($these->getLangue() == "enfr"){
-        $ENFRlanguageNumber++;
-    }else{
-        $otherLanguageNumber++;
-    }
+    
+    
 }
 
 
@@ -32,15 +29,17 @@ Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,Bli
 Chart.defaults.global.defaultFontColor = '#858796';
 
 // Pie Chart Example
-var ctx = document.getElementById("myPieChart");
+var ctx = document.getElementById("pie-chart-embargo");
 var myPieChart = new Chart(ctx, {
   type: 'doughnut',
   data: {
-    labels: ["fr", "en", "enfr", "autres"],
+    labels: ["Sous embargo", "Non sous embargo"],
     datasets: [{
-      data: [<?php echo $FRlanguageNumber; ?>, parseInt(<?php echo $ENlanguageNumber; ?>), parseInt(<?php echo $ENFRlanguageNumber; ?>), parseInt(<?php echo $otherLanguageNumber; ?>)],
-      backgroundColor: ['#4e73df', '#C8331C', '#13D253', '#A808A0'],
-      hoverBackgroundColor: ['#2e59d9', '#A62817', '#2CAF35', '#D21399'],
+      //data: [<?php echo $FRlanguageNumber; ?>, parseInt(<?php echo $ENlanguageNumber; ?>), parseInt(<?php echo $ENFRlanguageNumber; ?>), parseInt(<?php echo $otherLanguageNumber; ?>)],
+      data : [<?php echo $thesesSousEmbargo; ?>, <?php echo $thesesNonSousEmbargo; ?>],
+
+      backgroundColor: ['#6f42c1', '#ffc107'],
+      hoverBackgroundColor: ['#5a32a3', '#e0a800'],
       hoverBorderColor: "rgba(234, 236, 244, 1)",
     }],
   },

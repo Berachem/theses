@@ -9,6 +9,18 @@ require_once 'php/stopWords.php';
 session_start();
 
 /*
+* Renvoie une date (AAAA-MM-JJ)formatée en français (ex: 1er janvier 2018)
+*
+*/
+function formatDate($date){
+    $date = new DateTime($date);
+    $date = $date->format('d-m-Y');
+    $date = explode('-', $date);
+    $date = $date[0].' '.$GLOBALS['mois'][$date[1]].' '.$date[2];
+    return $date;
+}
+
+/*
 * Renvoie une liste associant un code région (ex: fr-idf, fr-ara...)
 * à son nombre d'occurences dans un fichier json
 */
@@ -315,35 +327,58 @@ $sujets = getSubjectsTextForCloud($theses);
                         </li>
 
                         <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Berachem MARKRIA</span>
+                <?php 
+                if (isset($_SESSION['userId'])){
+                    echo '
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Berachem MARKRIA</span>
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
                             </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Paramètres
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activité
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Déconnexion
-                                </a>
-                            </div>
-                        </li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Paramètres
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Activité
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </li>
+                    ';
+                }else{
+                    // bouttons de connexion et d'inscription
+                    echo '
+                    <li class="nav-item">
+                        <a class="nav-link" href="autres/connexion.html">
+                            <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Connexion
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="autres/inscription.html">
+                            <i class="fas fa-user-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Inscription
+                        </a>
+                    </li>';
+                }
+
+
+                ?>
+
 
                     </ul>
 
@@ -380,7 +415,7 @@ $sujets = getSubjectsTextForCloud($theses);
                     <!-- Content Row -->
                     <div class="row">
 
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- Nombre de thèses -->
                         <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-right">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
@@ -400,7 +435,7 @@ $sujets = getSubjectsTextForCloud($theses);
                             </div>
                         </div>
 
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- Nombre de directeurs de thèses -->
                         <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-down">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
@@ -422,7 +457,7 @@ $sujets = getSubjectsTextForCloud($theses);
                             </div>
                         </div>
 
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- Nombre de thèses en ligne CARD -->
                         <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-down">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
@@ -474,7 +509,7 @@ $sujets = getSubjectsTextForCloud($theses);
                             </div>
                         </div>
 
-                        <!-- Pending Requests Card Example -->
+                        <!-- Nombre d'établissements -->
                         <div class="col-xl-3 col-md-6 mb-4" data-aos="fade-left">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
@@ -497,7 +532,7 @@ $sujets = getSubjectsTextForCloud($theses);
 
                     <div class="row">
 
-                        <!-- Area Chart -->
+                        <!-- Evolution du nombre de thèses dans le temps -->
                         <div class="col-xl-8 col-lg-7" data-aos="fade-right">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
@@ -529,7 +564,7 @@ $sujets = getSubjectsTextForCloud($theses);
                             </div>
                         </div>
 
-                        <!-- Pie Chart -->
+                        <!-- Langues -->
                         <div class="col-xl-4 col-lg-5" data-aos="fade-left">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
@@ -540,7 +575,7 @@ $sujets = getSubjectsTextForCloud($theses);
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
+                                        <canvas id="pie-chart-langues"></canvas>
                                     </div>
                                     <div class="mt-4 text-center small">
                                         <span class="mr-2">
@@ -561,7 +596,7 @@ $sujets = getSubjectsTextForCloud($theses);
                         </div>
                     </div>
 
-                    <!-- Content Row -->
+                    <!-- Nuage de mots -->
                     <div class="row">
                             <!-- Approach -->
                         <div class="col-xl-8 col-lg-7" data-aos="fade-right">
@@ -570,23 +605,15 @@ $sujets = getSubjectsTextForCloud($theses);
                                         <h6 class="m-0 font-weight-bold text-primary">
                                             Nuage de mots
                                         </h6>
-                                    </div>
-                                   
-                                   
-                                             
-                                  
+                                    </div>      
                                     <div class="card-body">
-                         
+                                        <figure class="highcharts-figure">
+                                            <div id="nuage"></div>
+                                                    <p>
+                                                
+                                                </p>
 
-
-
-                                    <figure class="highcharts-figure">
-                                    <div id="nuage"></div>
-                                    <p>
-                                   
-                                </p>
-
-                                    </figure>
+                                        </figure>
 
 
                                     <script>
@@ -645,6 +672,7 @@ $sujets = getSubjectsTextForCloud($theses);
                                 </div>
                             </div>
 
+                        <!-- Carte de France -->
                             <div class="col-xl-4 col-lg-5" data-aos="fade-left">
 
                                 <!-- Illustrations -->
@@ -731,7 +759,89 @@ $sujets = getSubjectsTextForCloud($theses);
 
                              </div>
                      </div>
-                     </div>
+
+                     <!-- Graphiques pie suppplémentaire (chart-pie-embargo) -->
+                    <div class="row">
+
+                        <!-- embargo -->
+                        <div class="col-xl-4 col-lg-5" data-aos="fade-right">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Nombre de thèses sous embargo</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="pie-chart-embargo"></canvas>
+                                    </div>
+                                    <div class="mt-4 text-center small">
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle" style="color: #6f42c1;"></i> Oui
+                                        </span>
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle" style="color: #ffc107;"></i> Non
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thèses en ligne ou pas -->
+                        <div class="col-xl-4 col-lg-5" data-aos="fade-left">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Nombre de thèses en ligne</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="pie-chart-online"></canvas>
+                                    </div>
+                                    <div class="mt-4 text-center small">
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle text-primary"></i> Oui
+                                        </span>
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle text-success"></i> Non
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thèses par etablissements-->
+                        <div class="col-xl-4 col-lg-5" data-aos="fade-left">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Nombre de thèses par établissement</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="pie-chart-etablissements"></canvas>
+                                    </div>
+                                    <div class="mt-4 text-center small">
+                                        <?php
+                                            if (isset($_SESSION["etablissements"]) && isset($_SESSION["etablissements-colors"])){
+                                                for ($i = 0; $i < count($_SESSION["etablissements"]); $i++){
+                                                    echo '<span class="mr-2">
+                                                            <i class="fas fa-circle" style="color: '.$_SESSION["etablissements-colors"][$i].'"></i> '.$_SESSION["etablissements"][$i].'
+                                                        </span>';
+                                                }
+                                            }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+
                     
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
@@ -744,7 +854,7 @@ $sujets = getSubjectsTextForCloud($theses);
                                 data-search="true" data-show-columns="true">
                                     <thead>
                                         <tr>
-                                            <th>NNT</th>
+                                            <!-- <th>NNT</th> -->
                                             <th>Titre</th>
                                             <th>Auteur</th>
                                             <th>Date de Soutenance</th>
@@ -761,27 +871,26 @@ $sujets = getSubjectsTextForCloud($theses);
                                             $SliceTheses = array_slice($theses,0,10);
                                             foreach($SliceTheses as $these){
                                                 echo "<tr>";
-                                                echo "<td> <i>".$these->getID()."</i></td>";
+                                                // echo "<td> <i>".$these->getID()."</i></td>";
                                                 echo "<td>".$these->getTitre()."</td>";
                                                 echo "<td>".$these->getAuteur()."</td>";
-                                                echo "<td>".$these->getDate()."</td>";
+                                                echo "<td>".formatDate($these->getDate())."</td>";
                                                 echo "<td>".$these->getEtablissement()."</td>";
                                                 if ($these->getLangue() == "fr"){
-                                                    echo '<td> <img src="img/fr.png" alt="" width="35" height="35"> </td>'; 
+                                                    echo '<td> <img src="img/fr.png" alt="" width="15" height="15"> </td>'; 
                                                 } else if ($these->getLangue() == "en"){
-                                                    echo '<td> <img src="img/en.png" alt="" width="35" height="35"> </td>';
+                                                    echo '<td> <img src="img/en.png" alt="" width="15" height="15"> </td>';
                                                 } else if ($these->getLangue() == "enfr"){
-                                                    echo '<td> <img src="img/fr.png" alt="" width="35" height="35"><img src="img/en.png" alt="" width="35" height="35"> </td>';
+                                                    echo '<td> <img src="img/fr.png" alt="" width="15" height="15"><img src="img/en.png" alt="" width="15" height="15"> </td>';
                                                 } else {
                                                     echo "<td>Autres</td>";
                                                 }
                                                 echo "<td>".$these->getDiscipline()."</td>";
                                                 echo '<td><a class="btn btn-info" href="https://www.theses.fr/'.$these->getID().'" target="_blank">  
-                                                <i class="fas fa-eye"></i>
-                                                Consulter</a></td>';
+                                                <i class="fas fa-eye"></i></a></td>';
                                                 if ($these->getEnligne()=="oui"){
                                                     echo '<td><a class="btn btn-dark" href="https://www.theses.fr/'.$these->getID().'/document" target="_blank">  
-                                                    Télécharger</a></td>';
+                                                    <i class="fas fa-download"></i></a></td>';
                                                 }
 
                                                 echo "</tr>";
@@ -1073,7 +1182,10 @@ $sujets = getSubjectsTextForCloud($theses);
 
 
 <?php
-    include("js/chart-pie.php");
+    include("js/chart-pie-langues.php");
+    include("js/chart-pie-online.php");
+    include("js/chart-pie-embargo.php");
+    include("js/chart-pie-etablissements.php");
     include("js/chart-area.php");
     
 ?>
