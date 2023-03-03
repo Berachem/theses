@@ -49,12 +49,16 @@ class Connexion {
         $stmt=NULL;
     }
 
+    public function lastInsertId(){
+        return $this->connec->lastInsertId();
+    }
+
 }
 
 
 use These\DotEnv;
 
-include("php/lib/parse.env.php");
+
 (new DotEnv('.env'))->load();
 // mysql:host=localhost;dbname=test;
 

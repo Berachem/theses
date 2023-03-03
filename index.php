@@ -1,5 +1,6 @@
 <?php
 
+include("php/lib/parse.env.php");
 require_once 'php/These.php';
 require_once 'php/Connexion.php';
 require_once 'php/stopWords.php';
@@ -190,7 +191,7 @@ $sujets = getSubjectsTextForCloud($theses);
                     <span>Tableau de bord</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="index.php">
+                <a class="nav-link" href="alertes.php">
                     <i class="fas fa-fw fa-bell"></i>
                     <span>Alertes</span></a>
             </li>
@@ -328,13 +329,13 @@ $sujets = getSubjectsTextForCloud($theses);
 
                         <div class="topbar-divider d-none d-sm-block"></div>
                 <?php 
-                if (isset($_SESSION['userId'])){
+                if (isset($_SESSION['id'])){
                     echo '
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Berachem MARKRIA</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">'.$_SESSION["pseudo"].'</span>
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -363,13 +364,13 @@ $sujets = getSubjectsTextForCloud($theses);
                     // bouttons de connexion et d'inscription
                     echo '
                     <li class="nav-item">
-                        <a class="nav-link" href="autres/connexion.html">
+                        <a class="nav-link" href="autres/connexion.php">
                             <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                             Connexion
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="autres/inscription.html">
+                        <a class="nav-link" href="autres/inscription.php">
                             <i class="fas fa-user-plus fa-sm fa-fw mr-2 text-gray-400"></i>
                             Inscription
                         </a>
@@ -388,6 +389,26 @@ $sujets = getSubjectsTextForCloud($theses);
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                         <?php
+
+                        if (isset($_GET['registered'])) {
+                            echo '
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Bravo !</strong> Vous êtes maintenant inscrit sur le site. Merci !
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            ';
+                        }else if (isset($_GET['connected'])) {
+                            echo '
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Bravo !</strong> Vous êtes maintenant connecté sur le site. Merci !
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            ';
+                        }
 
                             if ($motif != ""){
                                 echo '<i class="badge badge-primary">Recherche pour "'.$motif.'"</i>';
@@ -1144,15 +1165,15 @@ $sujets = getSubjectsTextForCloud($theses);
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Prêt à vous déconnecter ? :)</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Sélectionnez "Déconnexion" ci-dessous si vous êtes prêt à mettre fin à votre session en cours.</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                    <a class="btn btn-primary" href="php/profile/logoutUser.php">Déconnexion</a>
                 </div>
             </div>
         </div>

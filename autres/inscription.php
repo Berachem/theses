@@ -44,12 +44,13 @@
                                             <a href="../index.php">Retour à l'accueil</a>
                                             <br>
                                             <br>
-                                            <a class="small" href="connexion.html">Se connecter</a>
+                                            <a class="small" href="connexion.php">Se connecter</a>
                                             <br>
                                            Créez des alertes et configurez vos paramètres !
                                         </p>
                                     </div>
-                                    <form class="user" method="POST" action="../php/registerUser.php">
+                                    <!-- FORMULAIRE --> 
+                                    <form class="user" method="POST" action="../php/profile/registerUser.php">
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
                                                 id="pseudo" aria-describedby="pseudoHelp"
@@ -58,22 +59,27 @@
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
                                                 id="email" aria-describedby="emailHelp"
-                                                placeholder="Entrez votre email">
+                                                placeholder="Entrez votre email" name="email">
                                             <p id="emailHelp" class="small text-danger" style="display:none">Email non valide ou existant</p>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="password" placeholder="Mot de passe">
+                                                id="password" placeholder="Mot de passe" name="password">
                                             <p id="passwordHelp" class="small text-danger" style="display:none">Mot de passe ne respectant pas les critères RGPD
                                                 (12 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial)  
                                             </p>
                                         </div>
                                         <input class="btn btn-primary btn-user btn-block" id="submit" type="submit">
-                                            Inscription
+                                    
                                         </input>
                                         <p id="errorHelp" class="small text-danger" style="display:none">Veuillez remplir tous les champs correctement</p>
                                     </form>
                                     <hr>
+                                    <?php
+                                        if (isset($_GET['registered']) && ($_GET['registered'] == 'false')) {
+                                            echo '<p class="small text-danger">Erreur lors de l\'inscription</p>';
+                                        }
+                                    ?>
                                     <br>
                                     <br>
                                     <p class="small text-center">Thèses.berachem.dev</p>
@@ -99,7 +105,34 @@
         
         function validateEmail(email) {
             var re = /\S+@\S+\.\S+/;
-            return re.test(email);
+            if (!re.test(email)) {
+                return false;
+            } 
+
+            console.log (email);
+            var formData = new FormData();
+            formData.append("email", email);
+            var res = fetch("../php/profile/isMailAvailable_API.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    document.getElementById("errorHelp").style.display = "none";
+                    return true;
+                } else {
+                    document.getElementById("errorHelp").style.display = "block";
+                    return false;
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+            return res;
+ 
         }
         
         function validatePassword(password) {

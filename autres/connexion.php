@@ -47,7 +47,7 @@
                                             Retrouvez toutes vos alertes et configurations
                                         </p>
                                     </div>
-                                    <form class="user" action="../php/connectUser.php" method="post">
+                                    <form class="user" action="../php/profile/connectUser.php" method="post">
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
                                                 id="email" aria-describedby="emailHelp"
@@ -58,14 +58,19 @@
                                                 id="password" placeholder="Mot de passe">
                                         </div>
                                         <input href="index.php" class="btn btn-primary btn-user btn-block" id="submit" type="submit">
-                                            Connexion
+                                            
                                          </input>
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="inscription.html">Créez un compte</a>
+                                        <a class="small" href="inscription.php">Créez un compte</a>
                                     </div>
                                     <br>
+                                    <?php
+                                        if(isset($_GET['connected']) && $_GET['connected'] == 'false') {
+                                            echo '<div class="alert alert-danger" role="alert"> Mot de passe ou email incorrect </div>';
+                                        }
+                                    ?>
                                     <br>
                                     <p class="small text-center">Thèses.berachem.dev</p>
                                 </div>
