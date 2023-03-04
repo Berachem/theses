@@ -51,11 +51,11 @@
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
                                                 id="email" aria-describedby="emailHelp"
-                                                placeholder="Entrez votre email">
+                                                placeholder="Entrez votre email" name="email">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="password" placeholder="Mot de passe">
+                                                id="password" placeholder="Mot de passe" name="password">
                                         </div>
                                         <input href="index.php" class="btn btn-primary btn-user btn-block" id="submit" type="submit">
                                             

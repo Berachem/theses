@@ -299,7 +299,7 @@ if (!isset($_SESSION['id'])) {
 
                         <h1 class="mb-4">Liste des alertes configurées</h1>
 
-                        <p class="mb-4">Vous pouvez ajouter ou supprimer des alertes en cliquant sur les boutons ci-dessous. En fonction de l'intervalle de temps que vous avez choisi, vous recevrez un mail à chaque fois que le patern sera trouvé dans les logs.</p>
+                        <p class="mb-4">Vous pouvez ajouter ou supprimer des alertes en cliquant sur les boutons ci-dessous. En fonction de l'intervalle de temps que vous avez choisi, vous recevrez un mail à chaque fois que le patern sera trouvé dans les ressources.</p>
 
                         <?php
                         // Récupération de tous les crontabs recherchés

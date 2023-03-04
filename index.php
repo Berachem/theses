@@ -13,11 +13,13 @@ session_start();
 * Renvoie une date (AAAA-MM-JJ)formatée en français (ex: 1er janvier 2018)
 *
 */
-function formatDate($date){
-    $date = new DateTime($date);
-    $date = $date->format('d-m-Y');
+function formatDate($date){ // recoit une date au format AAAA-MM-JJ et la renvoie au format JJ mois AAAA
     $date = explode('-', $date);
-    $date = $date[0].' '.$GLOBALS['mois'][$date[1]].' '.$date[2];
+    // reverse the array
+    $date = array_reverse($date);
+    // convert the array to a string
+    $date = implode('/', $date);
+    // convert the string to a timestamp
     return $date;
 }
 
