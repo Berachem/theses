@@ -320,12 +320,12 @@ $sujets = getSubjectsTextForCloud($theses);
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">26 octobre 2003</div>
-                                        <span class="font-weight-bold">Les alertes ne sont pas encore implémentées.</span>
+                                        <div class="small text-gray-500">10/03/2023</div>
+                                        <span class="font-weight-bold">Le système d'alerte a été mis en place ! </span>
                                     </div>
                                 </a>
        
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Voir plus</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="alertes.php">Tester le système d'alerte</a>
                             </div>
                         </li>
 
@@ -342,7 +342,16 @@ $sujets = getSubjectsTextForCloud($theses);
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                             aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">
+              
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </li>
+                    ';
+                    /*
+                                  <a class="dropdown-item" href="#">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
                             </a>
@@ -355,13 +364,7 @@ $sujets = getSubjectsTextForCloud($theses);
                                 Activité
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Déconnexion
-                            </a>
-                        </div>
-                    </li>
-                    ';
+                            */
                 }else{
                     // bouttons de connexion et d'inscription
                     echo '
@@ -885,7 +888,6 @@ $sujets = getSubjectsTextForCloud($theses);
                                             <th>langue</th>
                                             <th>discipline</th>
                                             <th>Liens</th>
-                                            <th>Télécharger</th>
                                             
                                         </tr>
                                     </thead>
@@ -910,9 +912,9 @@ $sujets = getSubjectsTextForCloud($theses);
                                                 }
                                                 echo "<td>".$these->getDiscipline()."</td>";
                                                 echo '<td><a class="btn btn-info" href="https://www.theses.fr/'.$these->getID().'" target="_blank">  
-                                                <i class="fas fa-eye"></i></a></td>';
+                                                <i class="fas fa-eye"></i></a>';
                                                 if ($these->getEnligne()=="oui"){
-                                                    echo '<td><a class="btn btn-dark" href="https://www.theses.fr/'.$these->getID().'/document" target="_blank">  
+                                                    echo '<a class="btn btn-dark" href="https://www.theses.fr/'.$these->getID().'/document" target="_blank">  
                                                     <i class="fas fa-download"></i></a></td>';
                                                 }
 

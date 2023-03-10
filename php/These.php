@@ -60,6 +60,23 @@ class These
             
         }
 
+    public function fixUTF8($string){
+        $string = str_replace("e?", "é", $string);
+        $string = str_replace("o?", "ô", $string);
+        $string = str_replace("a?", "à", $string);
+        $string = str_replace("c?", "ç", $string);
+        $string = str_replace("u?", "ù", $string);
+        $string = str_replace("i?", "î", $string);
+        $string = str_replace("e?", "è", $string);
+        $string = str_replace("a?", "â", $string);
+        $string = str_replace("u?", "û", $string);
+        $string = str_replace("i?", "ï", $string);
+        $string = str_replace("o?", "ö", $string);
+        $string = str_replace("a?", "ä", $string);
+        $string = str_replace("u?", "ü", $string);  
+        return $string;
+    }
+
     public function getCodeRegion(){
         return $this->codeRegion;
     }
@@ -72,10 +89,10 @@ class These
         return $this->id;
     }
     public function getTitre(){
-        return $this->titre;
+        return $this->fixUTF8($this->titre);
     }
     public function getAuteur(){
-        return $this->auteur;
+        return $this->fixUTF8($this->auteur);
     }
     public function getDate(){
         return $this->date;
@@ -84,7 +101,7 @@ class These
         return $this->langue;
     }
     public function getDescription(){
-        return $this->description;
+        return $this->fixUTF8($this->description);
     }
     public function getEtablissement(){
         return $this->etablissement;

@@ -67,12 +67,12 @@ if (!isset($_SESSION['id'])) {
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Tableau de bord</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="alertes.php">
                     <i class="fas fa-fw fa-bell"></i>
                     <span>Alertes</span></a>
@@ -293,11 +293,18 @@ if (!isset($_SESSION['id'])) {
                                 </button>
                                 </div>';
 
+                        }else if (isset($_GET["full"])){
+                                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                Vous ne pouvez pas ajouter plus de 2 alertes !
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>';
                         }
 
                     ?>
 
-                        <h1 class="mb-4">Liste des alertes configurées</h1>
+                        <h1 class="mb-4">Liste des alertes configurées <b>(Max 2)</b></h1>
 
                         <p class="mb-4">Vous pouvez ajouter ou supprimer des alertes en cliquant sur les boutons ci-dessous. En fonction de l'intervalle de temps que vous avez choisi, vous recevrez un mail à chaque fois que le patern sera trouvé dans les ressources.</p>
 
@@ -306,23 +313,9 @@ if (!isset($_SESSION['id'])) {
                         // $crontabs = getAllResearchedPaterns();
 
                         //for debug
-                        $crontabs = array(
-                            array(
-                                'id' => 1,
-                                'patern' => 'patern1',
-                                'intervalle' => 'intervalle1'
-                            ),
-                            array(
-                                'id' => 2,
-                                'patern' => 'patern2',
-                                'intervalle' => 'intervalle2'
-                            ),
-                            array(
-                                'id' => 3,
-                                'patern' => 'patern3',
-                                'intervalle' => 'intervalle3'
-                            ),
-                        );
+                        $crontabs = $db->q('SELECT * FROM T_Alertes');
+
+
 
                         if (count($crontabs) > 0) {
                             // Affichage du tableau si au moins un crontab est trouvé
@@ -333,15 +326,15 @@ if (!isset($_SESSION['id'])) {
 
                             foreach ($crontabs as $crontab) {
                                 echo '<tr>';
-                                echo '<td>' . $crontab['patern'] . '</td>';
-                                echo '<td>' . $crontab['intervalle'] . '</td>';
+                                echo '<td>"' . $crontab->patern . '"</td>';
+                                echo '<td>' . $crontab->intervalle . ' heure(s)</td>';
                                 echo '<td>
-                                <a href="alertes.php?delete=' . $crontab['id'] . '">
+                                <a href="php/profile/deletePatern.php?id=' . $crontab->id . '">
                                     <button class="btn btn-danger" type="button">
                                         <i class="fas fa-trash fa-sm"></i>
                                     </button>
                                 </a>
-                                <a href="alertes.php?try=' . $crontab['id'] . '">
+                                <a href="php/profile/sendMail.php?idPatern=' . $crontab->id. '">
                                     <button class="btn btn-success" type="button">
                                         <i class="fas fa-play fa-sm"></i>
                                     </button>
@@ -355,7 +348,11 @@ if (!isset($_SESSION['id'])) {
                             echo '</div>';
                         } else {
                             // Affichage d'un message si aucun crontab n'est trouvé
-                            echo '<p>Aucun crontab trouvé.</p>';
+                           // echo '<p>Aucun crontab trouvé.</p>';
+                           echo '<div class="alert alert-info" role="alert">
+                            Vous n\'avez pas encore ajouté de paterns. Cliquez sur le bouton ci-dessous pour en ajouter un.
+                            </div>';
+                            
                         }
                         ?>
 
