@@ -279,7 +279,7 @@ if (!isset($_SESSION['id'])) {
                             
                         }else if (isset($_GET["add"])){
                                 echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                Patern ajouté avec succès !
+                                Motif ajouté avec succès !
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -287,7 +287,7 @@ if (!isset($_SESSION['id'])) {
                             
                         }else if (isset($_GET["delete"])){
                                 echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                Patern supprimé avec succès !
+                                Motif supprimé avec succès !
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -306,7 +306,7 @@ if (!isset($_SESSION['id'])) {
 
                         <h1 class="mb-4">Liste des alertes configurées <b>(Max 2)</b></h1>
 
-                        <p class="mb-4">Vous pouvez ajouter ou supprimer des alertes en cliquant sur les boutons ci-dessous. En fonction de l'intervalle de temps que vous avez choisi, vous recevrez un mail à chaque fois que le patern sera trouvé dans les ressources.</p>
+                        <p class="mb-4">Vous pouvez ajouter ou supprimer des alertes en cliquant sur les boutons ci-dessous. En fonction de l'intervalle de temps que vous avez choisi, vous recevrez un mail à chaque fois que le motif sera trouvé dans les ressources.</p>
 
                         <?php
                         // Récupération de tous les crontabs recherchés
@@ -327,7 +327,7 @@ if (!isset($_SESSION['id'])) {
                             // Affichage du tableau si au moins un crontab est trouvé
                             echo '<div class="table-responsive">';
                             echo '<table class="table table-striped">';
-                            echo '<thead><tr><th>Patern</th><th>Intervalle</th><th>Actions</th></tr></thead>';
+                            echo '<thead><tr><th>Motif</th><th>Intervalle</th><th>Actions</th></tr></thead>';
                             echo '<tbody>';
 
                             foreach ($crontabs as $crontab) {
@@ -356,7 +356,7 @@ if (!isset($_SESSION['id'])) {
                             // Affichage d'un message si aucun crontab n'est trouvé
                            // echo '<p>Aucun crontab trouvé.</p>';
                            echo '<div class="alert alert-info" role="alert">
-                            Vous n\'avez pas encore ajouté de paterns. Cliquez sur le bouton ci-dessous pour en ajouter un.
+                            Vous n\'avez pas encore ajouté de motifs. Cliquez sur le bouton ci-dessous pour en ajouter un.
                             </div>';
                             
                         }
@@ -364,15 +364,15 @@ if (!isset($_SESSION['id'])) {
 
                         <hr>
 
-                        <h2>Ajouter un patern</h2>
+                        <h2>Ajouter un motif</h2>
 
-                        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#ajouterCrontabModal">Nouveau patern</button>
+                        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#ajouterCrontabModal">Nouveau motif</button>
 
                         <div class="modal fade" id="ajouterCrontabModal" tabindex="-1" role="dialog" aria-labelledby="ajouterCrontabModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content shadow-lg">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="ajouterCrontabModalLabel">Nouveau patern</h5>
+                                        <h5 class="modal-title" id="ajouterCrontabModalLabel">Nouveau motif</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -380,7 +380,7 @@ if (!isset($_SESSION['id'])) {
                                     <div class="modal-body">
                                         <form method="POST" action="php/profile/addPatern.php">
                                             <div class="form-group">
-                                                <label for="patern">Patern :</label>
+                                                <label for="patern">Motif :</label>
                                                 <input type="text" class="form-control" id="patern" name="patern">
                                             </div>
                                             <div class="form-group">
