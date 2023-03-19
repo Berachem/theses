@@ -313,7 +313,13 @@ if (!isset($_SESSION['id'])) {
                         // $crontabs = getAllResearchedPaterns();
 
                         //for debug
-                        $crontabs = $db->q('SELECT * FROM T_Alertes');
+                        $crontabs = $db->q(
+                        'SELECT * FROM T_Alertes WHERE idUser = :id', 
+                        array(
+                            array('id', $_SESSION['id'], PDO::PARAM_INT)
+                            )
+                        );
+
 
 
 
