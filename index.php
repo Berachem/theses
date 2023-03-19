@@ -13,7 +13,8 @@ session_start();
 * Renvoie une date (AAAA-MM-JJ)formatée en français (ex: 1er janvier 2018)
 *
 */
-function formatDate($date){ // recoit une date au format AAAA-MM-JJ et la renvoie au format JJ mois AAAA
+function formatDate($date)
+{ // recoit une date au format AAAA-MM-JJ et la renvoie au format JJ mois AAAA
     $date = explode('-', $date);
     // reverse the array
     $date = array_reverse($date);
@@ -27,14 +28,15 @@ function formatDate($date){ // recoit une date au format AAAA-MM-JJ et la renvoi
 * Renvoie une liste associant un code région (ex: fr-idf, fr-ara...)
 * à son nombre d'occurences dans un fichier json
 */
-function getRegionsCodeToEtablissementsNumber($theses){
+function getRegionsCodeToEtablissementsNumber($theses)
+{
     $regionsCodeToEtablissementsNumber = array();
     foreach ($theses as $these) {
         //echo $these->getCodeRegion()."<br>";
-        $regionCode = 'fr-'.strtolower($these->getCodeRegion());
+        $regionCode = 'fr-' . strtolower($these->getCodeRegion());
         if (array_key_exists($regionCode, $regionsCodeToEtablissementsNumber)) {
             $regionsCodeToEtablissementsNumber[$regionCode] += 1;
-        }else{
+        } else {
             $regionsCodeToEtablissementsNumber[$regionCode] = 1;
         }
     }
@@ -49,17 +51,18 @@ function getRegionsCodeToEtablissementsNumber($theses){
 /*
  * Renvoie les 10 premiers sujets abordés les plus récurrents
  */
-function getThe10MostReccurentSubjects($theses){
+function getThe10MostReccurentSubjects($theses)
+{
     $subjects = array();
-    foreach($theses as $these){
+    foreach ($theses as $these) {
         // split the subjects string into list
         $TMPsubjects = explode(",", $these->getSubjects());
         //print_r($TMPsubjects);
-        foreach($TMPsubjects as $subject){
+        foreach ($TMPsubjects as $subject) {
             // if the subject is not in the list, add it
-            if(in_array($subject, $subjects) && strlen($subject) > 2){
+            if (in_array($subject, $subjects) && strlen($subject) > 2) {
                 $subjects[$subject]++;
-            }else{
+            } else {
                 $subjects[$subject] = 1;
             }
         }
@@ -74,8 +77,9 @@ function getThe10MostReccurentSubjects($theses){
 /*
  * Renvoie le nombre d'établissements différents des thèses
  */
-function getNumberDistinctEtablissements($theses){
-    foreach($theses as $these){
+function getNumberDistinctEtablissements($theses)
+{
+    foreach ($theses as $these) {
         $etablissements[] = $these->getEtablissement();
         // remove duplicates
         $etablissements = array_unique($etablissements);
@@ -83,23 +87,26 @@ function getNumberDistinctEtablissements($theses){
     return count($etablissements);
 }
 
-function getSubjectsTextForCloud($theses){
-    $sujets = strtolower("'".implode(",", array_filter(array_map(function($these) { return $these->getSubjects(); }, array_slice($theses, 0,10))))."'");
+function getSubjectsTextForCloud($theses)
+{
+    $sujets = strtolower("'" . implode(",", array_filter(array_map(function ($these) {
+        return $these->getSubjects();
+    }, array_slice($theses, 0, 10)))) . "'");
 
     // for each StopWords_French.stopwords array, we remove it from the subjects
     $stopWords = StopWords_French::stopwords();
-    foreach($stopWords as $stopWord){
+    foreach ($stopWords as $stopWord) {
         // remove the stopword from the subjects only if it is not in the middle of a word
         $sujets = preg_replace("/\b$stopWord\b/i", "", $sujets);
     }
     return $sujets;
 }
 
-if (isset($_GET["random"])){
+if (isset($_GET["random"])) {
     //On prend un mot aléatoire dans un fichier texte
     $words = file('mot_francais.txt');
     $randomWord = $words[array_rand($words)];
-    header('Location: index.php?search='.$randomWord);
+    header('Location: index.php?search=' . $randomWord);
 }
 
 include('php/thesesSearcher.php');
@@ -111,10 +118,7 @@ if (!isset($_GET['search'])) {
 if (isset($_GET["search"])) {
     // filtrage des injections xss
     $motif = htmlspecialchars($_GET["search"]);
-
-
-
-} 
+}
 
 $theses = getAllThesesByAttributes($db, $motif);
 $_SESSION["theses"] = $theses;
@@ -149,9 +153,7 @@ $sujets = getSubjectsTextForCloud($theses);
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="css/style.min.css" rel="stylesheet">
@@ -163,7 +165,7 @@ $sujets = getSubjectsTextForCloud($theses);
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    
+
 
 </head>
 
@@ -197,7 +199,7 @@ $sujets = getSubjectsTextForCloud($theses);
                     <i class="fas fa-fw fa-bell"></i>
                     <span>Alertes</span></a>
             </li>
-<!--
+            <!--
      
             <hr class="sidebar-divider">
 
@@ -249,11 +251,9 @@ $sujets = getSubjectsTextForCloud($theses);
                     </button>
 
                     <!-- Topbar Search -->
-                    <form method="GET" action="index.php"
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <form method="GET" action="index.php" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Rechercher..."
-                                aria-label="Search" name ="search" aria-describedby="basic-addon2">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Rechercher..." aria-label="Search" name="search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
@@ -272,18 +272,14 @@ $sujets = getSubjectsTextForCloud($theses);
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Rechercher..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
+                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Rechercher..." aria-label="Search" aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
                                                 <i class="fas fa-search fa-sm"></i>
@@ -301,18 +297,27 @@ $sujets = getSubjectsTextForCloud($theses);
 
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
                             <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
                                     Alertes
                                 </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">16/02/2023</div>
+                                        <span class="font-weight-bold">Mise en place des graphiques terminée ! </span>
+                                    </div>
+                                </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-primary">
@@ -324,20 +329,35 @@ $sujets = getSubjectsTextForCloud($theses);
                                         <span class="font-weight-bold">Le système d'alerte a été mis en place ! </span>
                                     </div>
                                 </a>
-       
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-danger">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500" id="closing_website">
+                                            <!-- Temps restant avant 10 juillet 2023 en JS -->
+
+                                        </div>
+                                        <span class="font-weight-bold">Fermeture du site programmée ! </span>
+                                    </div>
+                                </a>
+
                                 <a class="dropdown-item text-center small text-gray-500" href="alertes.php">Tester le système d'alerte</a>
                             </div>
                         </li>
 
                         <div class="topbar-divider d-none d-sm-block"></div>
-                <?php 
-                if (isset($_SESSION['id'])){
-                    echo '
+                        <?php
+                        if (isset($_SESSION['id'])) {
+                            echo '
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">'.$_SESSION["pseudo"].'</span>
+                            
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><i class="fas fa-user fa-fw"></i>' . $_SESSION["pseudo"] . '</span>
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -350,7 +370,7 @@ $sujets = getSubjectsTextForCloud($theses);
                         </div>
                     </li>
                     ';
-                    /*
+                            /*
                                   <a class="dropdown-item" href="#">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
@@ -365,9 +385,9 @@ $sujets = getSubjectsTextForCloud($theses);
                             </a>
                             <div class="dropdown-divider"></div>
                             */
-                }else{
-                    // bouttons de connexion et d'inscription
-                    echo '
+                        } else {
+                            // bouttons de connexion et d'inscription
+                            echo '
                     <li class="nav-item">
                         <a class="nav-link" href="autres/connexion.php">
                             <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -380,10 +400,10 @@ $sujets = getSubjectsTextForCloud($theses);
                             Inscription
                         </a>
                     </li>';
-                }
+                        }
 
 
-                ?>
+                        ?>
 
 
                     </ul>
@@ -393,10 +413,10 @@ $sujets = getSubjectsTextForCloud($theses);
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                        <?php
+                    <?php
 
-                        if (isset($_GET['registered'])) {
-                            echo '
+                    if (isset($_GET['registered'])) {
+                        echo '
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <strong>Bravo !</strong> Vous êtes maintenant inscrit sur le site. Merci !
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -404,8 +424,8 @@ $sujets = getSubjectsTextForCloud($theses);
                                 </button>
                             </div>
                             ';
-                        }else if (isset($_GET['connected'])) {
-                            echo '
+                    } else if (isset($_GET['connected'])) {
+                        echo '
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <strong>Bravo !</strong> Vous êtes maintenant connecté sur le site. Merci !
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -413,29 +433,28 @@ $sujets = getSubjectsTextForCloud($theses);
                                 </button>
                             </div>
                             ';
-                        }
+                    }
 
-                            if ($motif != ""){
-                                echo '<i class="badge badge-primary">Recherche pour "'.$motif.'"</i>';
-                            }
+                    if ($motif != "") {
+                        echo '<i class="badge badge-primary">Recherche pour "' . $motif . '"</i>';
+                    }
 
-                        ?>
+                    ?>
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Tableau de bord</h1>
-                            <?php
-                                    if (sizeof($theses) == 0) {
-                                        echo '
+                        <?php
+                        if (sizeof($theses) == 0) {
+                            echo '
                                             <div class="badge badge-warning text-white shadow">
                                                 <div class="card-body">
                                                 <i class="fas fa-exclamation-triangle"></i> Nous n\'avons rien trouvé comme thèses à propos de cette recherche... :/ réessayez
                                                 </div>
                                             </div>';
-                                    }
+                        }
 
-                            ?>
-                        <a href="https://www.theses.fr/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-eye fa-sm text-white-50"></i> Consulter le site officiel</a>
+                        ?>
+                        <a href="https://www.theses.fr/" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-eye fa-sm text-white-50"></i> Consulter le site officiel</a>
                     </div>
 
                     <!-- Content Row -->
@@ -470,9 +489,9 @@ $sujets = getSubjectsTextForCloud($theses);
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Nombre de directeurs de thèses</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                 <?php 
-                                                    echo $nbDirectors;
-                                                 ?>
+                                                <?php
+                                                echo $nbDirectors;
+                                                ?>
                                             </div>
                                         </div>
                                         <div class="col-auto">
@@ -494,7 +513,7 @@ $sujets = getSubjectsTextForCloud($theses);
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                <?php 
+                                                    <?php
                                                     $nbTheseEnligne = 0;
                                                     foreach ($theses as $these) {
                                                         if ($these->getEnligne() == "oui") {
@@ -502,27 +521,25 @@ $sujets = getSubjectsTextForCloud($theses);
                                                         }
                                                     }
                                                     echo $nbTheseEnligne;
-                                                 
-                                                 
-                                                 ?> thèses
+
+
+                                                    ?> thèses
                                                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
                                                         <?php
-                                                            echo sizeof($theses) != 0 ? round($nbTheseEnligne / sizeof($theses) * 100) : 0;
+                                                        echo sizeof($theses) != 0 ? round($nbTheseEnligne / sizeof($theses) * 100) : 0;
                                                         ?>%
-                                                        
+
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: <?php
-                                                                echo sizeof($theses) != 0 ? round($nbTheseEnligne / sizeof($theses) * 100) : 0;
-                                                            ?>%" aria-valuenow="
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: <?php
+                                                                                                                            echo sizeof($theses) != 0 ? round($nbTheseEnligne / sizeof($theses) * 100) : 0;
+                                                                                                                            ?>%" aria-valuenow="
                                                             <?php
-                                                                echo sizeof($theses) != 0 ? round($nbTheseEnligne / sizeof($theses) * 100) : 0;
+                                                            echo sizeof($theses) != 0 ? round($nbTheseEnligne / sizeof($theses) * 100) : 0;
                                                             ?>
-                                                        " aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
+                                                        " aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -562,23 +579,20 @@ $sujets = getSubjectsTextForCloud($theses);
                         <div class="col-xl-8 col-lg-7" data-aos="fade-right">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Evolution du nombre de thèses dans le temps</h6>
-                                   
-                                   <?php
-                                   if (isset($_GET["chart"])){
-                                    $_SESSION["chart"] = $_GET["chart"];
-                                    if ($_GET["chart"] == "year") {
-                                        echo '<a href="index.php?search='.$motif.'&chart=month" class ="btn" style="background-color: black; color : white">Voir par mois</a>';
-                                    } else {
-                                        echo '<a href="index.php?search='.$motif.'&chart=year" class ="btn" style="background-color: black; color : white">Voir par années</a>';
-                                    }
-                        
-                                   }else{
-                                    echo '<a href="index.php?search='.$motif.'&chart=month" class ="btn" style="background-color: black; color : white">Voir par mois</a>';
 
-                                   }
+                                    <?php
+                                    if (isset($_GET["chart"])) {
+                                        $_SESSION["chart"] = $_GET["chart"];
+                                        if ($_GET["chart"] == "year") {
+                                            echo '<a href="index.php?search=' . $motif . '&chart=month" class ="btn" style="background-color: black; color : white">Voir par mois</a>';
+                                        } else {
+                                            echo '<a href="index.php?search=' . $motif . '&chart=year" class ="btn" style="background-color: black; color : white">Voir par années</a>';
+                                        }
+                                    } else {
+                                        echo '<a href="index.php?search=' . $motif . '&chart=month" class ="btn" style="background-color: black; color : white">Voir par mois</a>';
+                                    }
                                     ?>
                                 </div>
                                 <!-- Card Body -->
@@ -594,8 +608,7 @@ $sujets = getSubjectsTextForCloud($theses);
                         <div class="col-xl-4 col-lg-5" data-aos="fade-left">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Langues</h6>
                                 </div>
                                 <!-- Card Body -->
@@ -624,53 +637,51 @@ $sujets = getSubjectsTextForCloud($theses);
 
                     <!-- Nuage de mots -->
                     <div class="row">
-                            <!-- Approach -->
+                        <!-- Approach -->
                         <div class="col-xl-8 col-lg-7" data-aos="fade-right">
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">
-                                            Nuage de mots
-                                        </h6>
-                                    </div>      
-                                    <div class="card-body">
-                                        <figure class="highcharts-figure">
-                                            <div id="nuage"></div>
-                                                    <p>
-                                                
-                                                </p>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">
+                                        Nuage de mots
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <figure class="highcharts-figure">
+                                        <div id="nuage"></div>
+                                        <p>
 
-                                        </figure>
+                                        </p>
+
+                                    </figure>
 
 
                                     <script>
-                                           
-                                            
-                                            const text =
-                                            <?php   
-                                                echo $sujets;
+                                        const text =
+                                            <?php
+                                            echo $sujets;
                                             ?>,
                                             lines = text.replace(/[():'?0-9]+/g, '').split(/[,\. ]+/g),
                                             data = lines.reduce((arr, word) => {
                                                 let obj = Highcharts.find(arr, obj => obj.name === word);
                                                 if (obj) {
-                                                obj.weight += 1;
+                                                    obj.weight += 1;
                                                 } else {
-                                                obj = {
-                                                    name: word,
-                                                    weight: 1
-                                                };
-                                                arr.push(obj);
+                                                    obj = {
+                                                        name: word,
+                                                        weight: 1
+                                                    };
+                                                    arr.push(obj);
                                                 }
                                                 return arr;
                                             }, []);
 
-                                            Highcharts.chart('nuage', {
+                                        Highcharts.chart('nuage', {
                                             accessibility: {
                                                 screenReaderSection: {
-                                                beforeChartFormat: '<h5>{chartTitle}</h5>' +
-                                                    '<div>{chartSubtitle}</div>' +
-                                                    '<div>{chartLongdesc}</div>' +
-                                                    '<div>{viewTableButton}</div>'
+                                                    beforeChartFormat: '<h5>{chartTitle}</h5>' +
+                                                        '<div>{chartSubtitle}</div>' +
+                                                        '<div>{chartLongdesc}</div>' +
+                                                        '<div>{viewTableButton}</div>'
                                                 }
                                             },
                                             series: [{
@@ -687,114 +698,109 @@ $sujets = getSubjectsTextForCloud($theses);
                                             tooltip: {
                                                 headerFormat: '<span style="font-size: 16px"><b>{point.key}</b></span><br>'
                                             }
-                                            });
-
+                                        });
                                     </script>
-                                        
-                                        
-                                    
-    
-                                    </div>
+
+
+
+
                                 </div>
                             </div>
+                        </div>
 
                         <!-- Carte de France -->
-                            <div class="col-xl-4 col-lg-5" data-aos="fade-left">
+                        <div class="col-xl-4 col-lg-5" data-aos="fade-left">
 
-                                <!-- Illustrations -->
-                                <div class="card shadow mb-4">
-                                        <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-primary">Carte de France</h6>
-                                        </div>
-                                        <div class="card-body">
+                            <!-- Illustrations -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Carte de France</h6>
+                                </div>
+                                <div class="card-body">
 
-                                            <script>
+                                    <script>
+                                        (async () => {
 
-                                                (async () => {
+                                            const topology = await fetch(
+                                                'https://code.highcharts.com/mapdata/countries/fr/fr-all.topo.json'
+                                            ).then(response => response.json());
 
-                                                const topology = await fetch(
-                                                    'https://code.highcharts.com/mapdata/countries/fr/fr-all.topo.json'
-                                                ).then(response => response.json());
+                                            // Prepare demo data. The data is joined to map using value of 'hc-key'
+                                            // property by default. See API docs for 'joinBy' for more info on linking
+                                            // data and map.
+                                            const data = [
+                                                <?php
+                                                foreach (getRegionsCodeToEtablissementsNumber($theses) as $region => $number) {
+                                                    echo "['" . $region . "'," . $number . "],";
+                                                }
+                                                ?>
 
-                                                // Prepare demo data. The data is joined to map using value of 'hc-key'
-                                                // property by default. See API docs for 'joinBy' for more info on linking
-                                                // data and map.
-                                                const data = [
-                                                    <?php
-                                                        foreach(getRegionsCodeToEtablissementsNumber($theses) as $region => $number){
-                                                            echo "['".$region."',".$number."],";
+                                            ];
+
+                                            // Create the chart
+                                            Highcharts.mapChart('france-map', {
+                                                chart: {
+                                                    map: topology
+                                                },
+
+                                                title: {
+                                                    text: 'Carte Intéractive'
+                                                },
+
+                                                subtitle: {
+                                                    text: 'Régions de <a href="http://code.highcharts.com/mapdata/countries/fr/fr-all.topo.json">France</a>'
+                                                },
+
+                                                mapNavigation: {
+                                                    enabled: true,
+                                                    buttonOptions: {
+                                                        verticalAlign: 'bottom'
+                                                    }
+                                                },
+
+                                                colorAxis: {
+                                                    min: 0
+                                                },
+
+                                                series: [{
+                                                    data: data,
+                                                    name: 'Nombre de Thèses',
+                                                    states: {
+                                                        hover: {
+                                                            color: 'red'
                                                         }
-                                                    ?>
 
-                                                ];
-
-                                                // Create the chart
-                                                Highcharts.mapChart('france-map', {
-                                                    chart: {
-                                                        map: topology
                                                     },
-
-                                                    title: {
-                                                        text: 'Carte Intéractive'
-                                                    },
-
-                                                    subtitle: {
-                                                        text: 'Régions de <a href="http://code.highcharts.com/mapdata/countries/fr/fr-all.topo.json">France</a>'
-                                                    },
-
-                                                    mapNavigation: {
+                                                    dataLabels: {
                                                         enabled: true,
-                                                        buttonOptions: {
-                                                            verticalAlign: 'bottom'
-                                                        }
-                                                    },
+                                                        format: '{point.name}'
+                                                    }
+                                                }]
+                                            });
 
-                                                    colorAxis: {
-                                                        min: 0
-                                                    },
-
-                                                    series: [{
-                                                        data: data,
-                                                        name: 'Nombre de Thèses',
-                                                        states: {
-                                                            hover: {
-                                                                color: 'red'
-                                                            }
-                                                            
-                                                        },
-                                                        dataLabels: {
-                                                            enabled: true,
-                                                            format: '{point.name}'
-                                                        }
-                                                    }]
-                                                });
-
-                                                })();
-
-
-                                            </script>
-                                            <div id="france-map"></div>
-                                            <!--
+                                        })();
+                                    </script>
+                                    <div id="france-map"></div>
+                                    <!--
                                             <p>Add some quality, svg illustrations to your project courtesy of <a
                                                     target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
                                                 constantly updated collection of beautiful svg images that you can use
                                                 completely free and without attribution!</p>
                                                                             -->
-                                        </div>
                                 </div>
+                            </div>
 
-                             </div>
-                     </div>
+                        </div>
+                    </div>
 
-                     <!-- Graphiques pie suppplémentaire (chart-pie-embargo) -->
+                    <!-- Graphiques pie suppplémentaire (chart-pie-embargo) -->
                     <div class="row">
 
                         <!-- embargo -->
                         <div class="col-xl-4 col-lg-5" data-aos="fade-right">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Nombre de thèses sous embargo</h6>
                                 </div>
                                 <!-- Card Body -->
@@ -818,8 +824,7 @@ $sujets = getSubjectsTextForCloud($theses);
                         <div class="col-xl-4 col-lg-5" data-aos="fade-left">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Nombre de thèses en ligne</h6>
                                 </div>
                                 <!-- Card Body -->
@@ -843,8 +848,7 @@ $sujets = getSubjectsTextForCloud($theses);
                         <div class="col-xl-4 col-lg-5" data-aos="fade-left">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Nombre de thèses par établissement</h6>
                                 </div>
                                 <!-- Card Body -->
@@ -854,30 +858,28 @@ $sujets = getSubjectsTextForCloud($theses);
                                     </div>
                                     <div class="mt-4 text-center small">
                                         <?php
-                                            if (isset($_SESSION["etablissements"]) && isset($_SESSION["etablissements-colors"])){
-                                                for ($i = 0; $i < count($_SESSION["etablissements"]); $i++){
-                                                    echo '<span class="mr-2">
-                                                            <i class="fas fa-circle" style="color: '.$_SESSION["etablissements-colors"][$i].'"></i> '.$_SESSION["etablissements"][$i].'
+                                        if (isset($_SESSION["etablissements"]) && isset($_SESSION["etablissements-colors"])) {
+                                            for ($i = 0; $i < count($_SESSION["etablissements"]); $i++) {
+                                                echo '<span class="mr-2">
+                                                            <i class="fas fa-circle" style="color: ' . $_SESSION["etablissements-colors"][$i] . '"></i> ' . $_SESSION["etablissements"][$i] . '
                                                         </span>';
-                                                }
                                             }
+                                        }
                                         ?>
                                     </div>
                                 </div>
                             </div>
-                         </div>
+                        </div>
                     </div>
 
-                    
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">TOP 10 des thèses les plus pertinentes</h6>
-                    </div>
-                    <div class="card-body">
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">TOP 10 des thèses les plus pertinentes</h6>
+                        </div>
+                        <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" 
-                                data-toggle="table" data-pagination="true"
-                                data-search="true" data-show-columns="true">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true">
                                     <thead>
                                         <tr>
                                             <!-- <th>NNT</th> -->
@@ -888,50 +890,48 @@ $sujets = getSubjectsTextForCloud($theses);
                                             <th>langue</th>
                                             <th>discipline</th>
                                             <th>Liens</th>
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
-                                            $SliceTheses = array_slice($theses,0,10);
-                                            foreach($SliceTheses as $these){
-                                                echo "<tr>";
-                                                // echo "<td> <i>".$these->getID()."</i></td>";
-                                                echo "<td>".$these->getTitre()."</td>";
-                                                echo "<td>".$these->getAuteur()."</td>";
-                                                echo "<td>".formatDate($these->getDate())."</td>";
-                                                echo "<td>".$these->getEtablissement()."</td>";
-                                                if ($these->getLangue() == "fr"){
-                                                    echo '<td> <img src="img/fr.png" alt="" width="15" height="15"> </td>'; 
-                                                } else if ($these->getLangue() == "en"){
-                                                    echo '<td> <img src="img/en.png" alt="" width="15" height="15"> </td>';
-                                                } else if ($these->getLangue() == "enfr"){
-                                                    echo '<td> <img src="img/fr.png" alt="" width="15" height="15"><img src="img/en.png" alt="" width="15" height="15"> </td>';
-                                                } else {
-                                                    echo "<td>Autres</td>";
-                                                }
-                                                echo "<td>".$these->getDiscipline()."</td>";
-                                                echo '<td><a class="btn btn-info" href="https://www.theses.fr/'.$these->getID().'" target="_blank">  
+                                        $SliceTheses = array_slice($theses, 0, 10);
+                                        foreach ($SliceTheses as $these) {
+                                            echo "<tr>";
+                                            // echo "<td> <i>".$these->getID()."</i></td>";
+                                            echo "<td>" . $these->getTitre() . "</td>";
+                                            echo "<td>" . $these->getAuteur() . "</td>";
+                                            echo "<td>" . formatDate($these->getDate()) . "</td>";
+                                            echo "<td>" . $these->getEtablissement() . "</td>";
+                                            if ($these->getLangue() == "fr") {
+                                                echo '<td> <img src="img/fr.png" alt="" width="15" height="15"> </td>';
+                                            } else if ($these->getLangue() == "en") {
+                                                echo '<td> <img src="img/en.png" alt="" width="15" height="15"> </td>';
+                                            } else if ($these->getLangue() == "enfr") {
+                                                echo '<td> <img src="img/fr.png" alt="" width="15" height="15"><img src="img/en.png" alt="" width="15" height="15"> </td>';
+                                            } else {
+                                                echo "<td>Autres</td>";
+                                            }
+                                            echo "<td>" . $these->getDiscipline() . "</td>";
+                                            echo '<td><a class="btn btn-info" href="https://www.theses.fr/' . $these->getID() . '" target="_blank">  
                                                 <i class="fas fa-eye"></i></a>';
-                                                if ($these->getEnligne()=="oui"){
-                                                    echo '<a class="btn btn-dark" href="https://www.theses.fr/'.$these->getID().'/document" target="_blank">  
+                                            if ($these->getEnligne() == "oui") {
+                                                echo '<a class="btn btn-dark" href="https://www.theses.fr/' . $these->getID() . '/document" target="_blank">  
                                                     <i class="fas fa-download"></i></a></td>';
-                                                }
-
-                                                echo "</tr>";
-                                                
-                                             
                                             }
 
+                                            echo "</tr>";
+                                        }
+
                                         ?>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    
-                        <!-- 
+
+                    <!-- 
                         <div class="col-lg-6 mb-4">
 
                             
@@ -1114,46 +1114,46 @@ $sujets = getSubjectsTextForCloud($theses);
 
                             -->
 
-                        </div>
-
-                       
-                    </div>
-
                 </div>
-                <!-- /.container-fluid -->
+
 
             </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>
-                            <?php 
-                                $copyYear = 2022; 
-                                $curYear = date('Y'); 
-                                echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
-                                ?> By Berachem MARKRIA</span>
-                        <span>
-                            |
-                            <a href="https://www.theses.fr/" class="text-dark">Site officiel</a>
-                            |
-                            <a href="https://github.com/Berachem/theses" class="text-dark">Code Source</a>
-                            |
-                            <a href="https://www.cnil.fr/" class="text-dark">CNIL</a>
-                            |
-                            <a href="" class="text-dark">Accueil</a>
-                            |
-                            <a href="mailto:berachem.markria@gmail.com" class="text-dark">Contact</a>
-                        </span>
-                </div>
-
-            </footer>
-            <!-- End of Footer -->
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>
+                    <?php
+                    $copyYear = 2022;
+                    $curYear = date('Y');
+                    echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
+                    ?> By Berachem MARKRIA</span>
+                <span>
+                    |
+                    <a href="https://www.theses.fr/" class="text-dark">Site officiel</a>
+                    |
+                    <a href="https://github.com/Berachem/theses" class="text-dark">Code Source</a>
+                    |
+                    <a href="https://www.cnil.fr/" class="text-dark">CNIL</a>
+                    |
+                    <a href="" class="text-dark">Accueil</a>
+                    |
+                    <a href="mailto:berachem.markria@gmail.com" class="text-dark">Contact</a>
+                </span>
+            </div>
+
+    </footer>
+    <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
 
     </div>
     <!-- End of Page Wrapper -->
@@ -1164,8 +1164,7 @@ $sujets = getSubjectsTextForCloud($theses);
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1182,7 +1181,7 @@ $sujets = getSubjectsTextForCloud($theses);
             </div>
         </div>
     </div>
-    
+
 
 
     <!-- Bootstrap core JavaScript-->
@@ -1196,7 +1195,7 @@ $sujets = getSubjectsTextForCloud($theses);
     <script src="js/script.min.js"></script>
 
     <!-- Page level plugins -->
-  
+
     <script src="vendor/chart.js/Chart.min.js"></script>
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 
@@ -1205,15 +1204,33 @@ $sujets = getSubjectsTextForCloud($theses);
         AOS.init();
     </script>
 
+    <script>
+        var countDownDate = new Date("Jul 10, 2023 00:00:00").getTime();
+        var x = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            document.getElementById("closing_website").innerHTML = days + "j " + hours + "h " +
+                minutes + "m " + seconds + "s ";
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("closing_website").innerHTML = "EXPIRED";
+            }
+        }, 1000);
+    </script>
 
-<?php
+
+    <?php
     include("js/chart-pie-langues.php");
     include("js/chart-pie-online.php");
     include("js/chart-pie-embargo.php");
     include("js/chart-pie-etablissements.php");
     include("js/chart-area.php");
-    
-?>
+
+    ?>
 </body>
 
 
