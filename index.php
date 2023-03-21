@@ -878,60 +878,65 @@ $sujets = getSubjectsTextForCloud($theses);
                             <h6 class="m-0 font-weight-bold text-primary">TOP 10 des thèses les plus pertinentes</h6>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" data-toggle="table" data-pagination="true" data-search="true" data-show-columns="true">
-                                    <thead>
-                                        <tr>
-                                            <!-- <th>NNT</th> -->
-                                            <th>Titre</th>
-                                            <th>Auteur</th>
-                                            <th>Date de Soutenance</th>
-                                            <th>Etablissement</th>
-                                            <th>langue</th>
-                                            <th>discipline</th>
-                                            <th>Liens</th>
+                            <div class="row">
+                                <?php
+                                $SliceTheses = array_slice($theses, 0, 10);
+                                $maxTextLength = 0;
+                                foreach ($SliceTheses as $these) {
+                                    if (strlen($these->getTitre()) > $maxTextLength) {
+                                        $maxTextLength = strlen($these->getTitre());
+                                    }
+                                    if (strlen($these->getAuteur()) > $maxTextLength) {
+                                        $maxTextLength = strlen($these->getAuteur());
+                                    }
+                                    if (strlen(formatDate($these->getDate()) . ' | ' . $these->getEtablissement() . ' | ' . $these->getDiscipline()) > $maxTextLength) {
+                                        $maxTextLength = strlen(formatDate($these->getDate()) . ' | ' . $these->getEtablissement() . ' | ' . $these->getDiscipline());
+                                    }
+                                }
+                                foreach ($SliceTheses as $these) {
+                                    $colors = array("primary", "secondary", "success", "danger", "warning", "info");
+                                    $color = $colors[array_rand($colors)];
+                                    echo '<div class="col-md-6 col-lg-4 mb-4">
+              <div class="card border-' . $color . ' h-100">
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title mb-auto">' . $these->getTitre() . '<span class="card-subtitle mb-2 text-muted" style="font-size: 0.8em;">
+                  <br> par ' . $these->getAuteur() . '</span></h5> 
+              
+                  <p class="card-text mb-2">' . 
+                  '<i class="fas fa-calendar"></i> ' .
+                  formatDate($these->getDate()) . 
+                  ' | <i class="fas fa-university"></i> '
+                  . $these->getEtablissement() . 
+                  ' | <i class="fas fa-book"></i> '
+                  . $these->getDiscipline(). ' | ';
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $SliceTheses = array_slice($theses, 0, 10);
-                                        foreach ($SliceTheses as $these) {
-                                            echo "<tr>";
-                                            // echo "<td> <i>".$these->getID()."</i></td>";
-                                            echo "<td>" . $these->getTitre() . "</td>";
-                                            echo "<td>" . $these->getAuteur() . "</td>";
-                                            echo "<td>" . formatDate($these->getDate()) . "</td>";
-                                            echo "<td>" . $these->getEtablissement() . "</td>";
-                                            if ($these->getLangue() == "fr") {
-                                                echo '<td> <img src="img/fr.png" alt="" width="15" height="15"> </td>';
-                                            } else if ($these->getLangue() == "en") {
-                                                echo '<td> <img src="img/en.png" alt="" width="15" height="15"> </td>';
-                                            } else if ($these->getLangue() == "enfr") {
-                                                echo '<td> <img src="img/fr.png" alt="" width="15" height="15"><img src="img/en.png" alt="" width="15" height="15"> </td>';
-                                            } else {
-                                                echo "<td>Autres</td>";
-                                            }
-                                            echo "<td>" . $these->getDiscipline() . "</td>";
-                                            echo '<td><a class="btn btn-info" href="https://www.theses.fr/' . $these->getID() . '" target="_blank">  
-                                                <i class="fas fa-eye"></i></a>';
-                                            if ($these->getEnligne() == "oui") {
-                                                echo '<a class="btn btn-dark" href="https://www.theses.fr/' . $these->getID() . '/document" target="_blank">  
-                                                    <i class="fas fa-download"></i></a></td>';
-                                            }
-
-                                            echo "</tr>";
-                                        }
-
-                                        ?>
-
-                                    </tbody>
-                                </table>
+                  // langues
+                  if ($these->getLangue() == "fr") {
+                    echo '<img src="img/fr.png" alt="" width="15" height="15">';
+                    } else if ($these->getLangue() == "en") {
+                        echo ' <img src="img/en.png" alt="" width="15" height="15">';
+                    } else if ($these->getLangue() == "enfr") {
+                        echo ' <img src="img/fr.png" alt="" width="15" height="15"><img src="img/en.png" alt="" width="15" height="15">';
+                    } else {
+                        echo "Autres";
+                    }
+                  
+                  echo'</p>
+                  <div class="mt-auto">';
+                                    if ($these->getEnligne() == "oui") {
+                                        echo '<a href="https://www.theses.fr/' . $these->getID() . '/document" class="btn btn-sm btn-outline-$color"
+                                        target="_blank">Télécharger</a>';
+                                    }
+                                    echo '<a href="https://www.theses.fr/' . $these->getID() . '" class="btn btn-sm btn-outline-secondary" target="_blank">Voir</a></div></div></div></div>';
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 
+                </div>
+
+                <!-- 
                         <div class="col-lg-6 mb-4">
 
                             
@@ -1114,13 +1119,13 @@ $sujets = getSubjectsTextForCloud($theses);
 
                             -->
 
-                </div>
-
-
             </div>
 
+
         </div>
-        <!-- /.container-fluid -->
+
+    </div>
+    <!-- /.container-fluid -->
 
     </div>
     <!-- End of Main Content -->
