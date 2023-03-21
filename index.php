@@ -583,16 +583,37 @@ $sujets = getSubjectsTextForCloud($theses);
                                     <h6 class="m-0 font-weight-bold text-primary">Evolution du nombre de thèses dans le temps</h6>
 
                                     <?php
-                                    if (isset($_GET["chart"])) {
-                                        $_SESSION["chart"] = $_GET["chart"];
-                                        if ($_GET["chart"] == "year") {
+
+                                    $_SESSION["chart"] = $_GET["chart"];
+                                    /*  if ($_GET["chart"] == "year") {
                                             echo '<a href="index.php?search=' . $motif . '&chart=month" class ="btn" style="background-color: black; color : white">Voir par mois</a>';
                                         } else {
                                             echo '<a href="index.php?search=' . $motif . '&chart=year" class ="btn" style="background-color: black; color : white">Voir par années</a>';
-                                        }
+                                        } */
+                                    // replace by a switch with label 
+                                    echo '<div class="custom-control custom-switch">';
+                                    echo '<input type="checkbox" class="custom-control-input" id="customSwitch1" onclick="switchChart()"';
+                                    if ($_GET["chart"] == "month") {
+                                        echo 'checked>';
                                     } else {
-                                        echo '<a href="index.php?search=' . $motif . '&chart=month" class ="btn" style="background-color: black; color : white">Voir par mois</a>';
+                                        echo '>';
                                     }
+                                    echo '<label class="custom-control-label" for="customSwitch1">Voir par mois</label>';
+                                    echo '</div>';
+
+                                    echo '<script>';
+                                    echo 'function switchChart() {';
+                                    echo 'var x = document.getElementById("customSwitch1");';
+                                    echo 'if (x.checked) {';
+                                    echo 'window.location.href = "index.php?search=' . $motif . '&chart=month";';
+                                    echo '} else {';
+                                    echo 'window.location.href = "index.php?search=' . $motif . '&chart=year";';
+                                    echo '}';
+                                    echo '}';
+                                    echo '</script>';
+
+
+
                                     ?>
                                 </div>
                                 <!-- Card Body -->
@@ -877,8 +898,8 @@ $sujets = getSubjectsTextForCloud($theses);
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">TOP 10 des thèses les plus pertinentes</h6>
                         </div>
-                        <div class="card-body">
-                            <div class="row">
+                        <div class="card-body top_theses">
+                            <div class="list-group">
                                 <?php
                                 $SliceTheses = array_slice($theses, 0, 10);
                                 $maxTextLength = 0;
@@ -894,40 +915,44 @@ $sujets = getSubjectsTextForCloud($theses);
                                     }
                                 }
                                 foreach ($SliceTheses as $these) {
-                                    $colors = array("primary", "secondary", "success", "danger", "warning", "info");
+                                    $colors = array("primary"); // , "secondary", "success", "danger", "warning", "info"
                                     $color = $colors[array_rand($colors)];
-                                    echo '<div class="col-md-6 col-lg-4 mb-4">
-              <div class="card border-' . $color . ' h-100">
-                <div class="card-body d-flex flex-column">
-                  <h5 class="card-title mb-auto">' . $these->getTitre() . '<span class="card-subtitle mb-2 text-muted" style="font-size: 0.8em;">
-                  <br> par ' . $these->getAuteur() . '</span></h5> 
-              
-                  <p class="card-text mb-2">' . 
-                  '<i class="fas fa-calendar"></i> ' .
-                  formatDate($these->getDate()) . 
-                  ' | <i class="fas fa-university"></i> '
-                  . $these->getEtablissement() . 
-                  ' | <i class="fas fa-book"></i> '
-                  . $these->getDiscipline(). ' | ';
+                                    echo '
+                                    <div class="card border-' . $color . ' h-100 w-100" style="margin-bottom: 10px;">
+                                        <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title mb-auto">' . $these->getTitre() . '<span class="card-subtitle mb-2 text-muted" style="font-size: 0.8em;">
+                                        <br> par ' . $these->getAuteur() . '</span></h5> 
+                                    
+                                        <p class="card-text mb-2">' .
+                                        '<i class="fas fa-calendar"></i> ' .
+                                        formatDate($these->getDate()) .
+                                        ' | <i class="fas fa-university"></i> '
+                                        . $these->getEtablissement() .
+                                        ' | <i class="fas fa-book"></i> '
+                                        . $these->getDiscipline() . ' | ';
 
-                  // langues
-                  if ($these->getLangue() == "fr") {
-                    echo '<img src="img/fr.png" alt="" width="15" height="15">';
-                    } else if ($these->getLangue() == "en") {
-                        echo ' <img src="img/en.png" alt="" width="15" height="15">';
-                    } else if ($these->getLangue() == "enfr") {
-                        echo ' <img src="img/fr.png" alt="" width="15" height="15"><img src="img/en.png" alt="" width="15" height="15">';
-                    } else {
-                        echo "Autres";
-                    }
-                  
-                  echo'</p>
-                  <div class="mt-auto">';
-                                    if ($these->getEnligne() == "oui") {
-                                        echo '<a href="https://www.theses.fr/' . $these->getID() . '/document" class="btn btn-sm btn-outline-$color"
-                                        target="_blank">Télécharger</a>';
+                                    // langues
+                                    if ($these->getLangue() == "fr") {
+                                        echo '<img src="img/fr.png" alt="" width="25" height="25">';
+                                    } else if ($these->getLangue() == "en") {
+                                        echo ' <img src="img/en.png" alt="" width="25" height="25">';
+                                    } else if ($these->getLangue() == "enfr") {
+                                        echo ' <img src="img/fr.png" alt="" width="25" height="25"><img src="img/en.png" alt="" width="25" height="25">';
+                                    } else {
+                                        echo "Autres";
                                     }
-                                    echo '<a href="https://www.theses.fr/' . $these->getID() . '" class="btn btn-sm btn-outline-secondary" target="_blank">Voir</a></div></div></div></div>';
+
+                                    echo '</p>
+                                    <div class="mt-auto">';
+
+                                    echo '<a href="https://www.theses.fr/' . $these->getID() . '" class="btn btn-sm btn-outline-secondary" target="_blank">Voir</a>';
+                                    if ($these->getEnligne() == "oui") {
+
+                                        echo '<a href="https://www.theses.fr/' . $these->getID() . '/document" class="btn btn-sm btn-outline-secondary" target="_blank">Télécharger</a>';
+                                    }
+                                    echo '</div>
+                                    </div>
+                                    </div>';
                                 }
                                 ?>
                             </div>
@@ -1226,6 +1251,7 @@ $sujets = getSubjectsTextForCloud($theses);
             }
         }, 1000);
     </script>
+
 
 
     <?php

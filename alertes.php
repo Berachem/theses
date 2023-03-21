@@ -265,6 +265,7 @@ if (!isset($_SESSION['id'])) {
                     ?>
 
                         <h1 class="mb-4">Liste des alertes configurées <b>(Max 2)</b></h1>
+                        
 
                         <p class="mb-4">Vous pouvez ajouter ou supprimer des alertes en cliquant sur les boutons ci-dessous. En fonction de l'intervalle de temps que vous avez choisi, vous recevrez un mail à chaque fois que le motif sera trouvé dans les ressources.</p>
 
@@ -297,12 +298,12 @@ if (!isset($_SESSION['id'])) {
                                 echo '<td>
                                 <a href="php/profile/deletePatern.php?id=' . $crontab->id . '">
                                     <button class="btn btn-danger" type="button">
-                                        <i class="fas fa-trash fa-sm"></i>
+                                        Supprimer
                                     </button>
                                 </a>
                                 <a href="php/profile/sendMail.php?idPatern=' . $crontab->id. '">
                                     <button class="btn btn-success" type="button">
-                                        <i class="fas fa-play fa-sm"></i>
+                                        Faire un essai
                                     </button>
                                 </a>
                                 
@@ -326,7 +327,9 @@ if (!isset($_SESSION['id'])) {
 
                         <h2>Ajouter un motif</h2>
 
-                        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#ajouterCrontabModal">Nouveau motif</button>
+                        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#ajouterCrontabModal" <?php if (count($crontabs) >= 2) { echo 'disabled'; } ?>>
+                            Nouveau motif
+                        </button>
 
                         <div class="modal fade" id="ajouterCrontabModal" tabindex="-1" role="dialog" aria-labelledby="ajouterCrontabModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">

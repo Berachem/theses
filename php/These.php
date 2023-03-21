@@ -104,7 +104,7 @@ class These
         return $this->fixUTF8($this->description);
     }
     public function getEtablissement(){
-        return $this->etablissement;
+        return preg_replace('/\([^)]+\)/', '', $this->etablissement);
     }
     public function getOai_set_specs(){
         return $this->oai_set_specs;
