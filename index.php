@@ -924,12 +924,13 @@ $sujets = getSubjectsTextForCloud($theses);
                                         <br> par ' . $these->getAuteur() . '</span></h5> 
                                     
                                         <p class="card-text mb-2">' .
-                                        '<i class="fas fa-calendar"></i> ' .
-                                        formatDate($these->getDate()) .
-                                        ' | <i class="fas fa-university"></i> '
-                                        . $these->getEtablissement() .
-                                        ' | <i class="fas fa-book"></i> '
-                                        . $these->getDiscipline() . ' | ';
+                                        '<span class="badge badge-primary"><i class="fas fa-calendar"></i> ' .
+                                        formatDate($these->getDate()) . '</span> ' .
+                                        '<span class="badge badge-secondary"><i class="fas fa-university"></i> ' .
+                                        $these->getEtablissement() . '</span> ' .
+                                        '<span class="badge badge-info"><i class="fas fa-book"></i> ' .
+                                        $these->getDiscipline() . '</span> ' ;
+
 
                                     // langues
                                     if ($these->getLangue() == "fr") {
