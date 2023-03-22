@@ -7,7 +7,9 @@ Options -Indexes
     Deny from all
 </Files>
 
-
-
-
+# Password protect directory
+AuthType Basic
+AuthName "Site protégé conformément au cahier des charges"
+AuthUserFile /home/vwryeac/www/These/.htpasswd
+Require user thomas.fressin@univ-eiffel.fr bera
 
