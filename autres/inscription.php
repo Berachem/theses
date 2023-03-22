@@ -82,7 +82,7 @@
                                     ?>
                                     <br>
                                     <br>
-                                    <p class="small text-center">Thèses.berachem.dev</p>
+                                    <p class="small text-center">these.berachem.dev</p>
                                 </div>
                             </div>
                         </div>

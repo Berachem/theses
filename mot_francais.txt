@@ -1,12 +1,9 @@
 science
-informatique
 musique
 atome
 histoire
 France
-azote
 eau
-oxygène
 hydrogène
 sodium
 potassium
@@ -16,7 +13,6 @@ phosphate
 carbonate
 nitrate
 atome
-proton
 neutron
 électron
 nucléon
