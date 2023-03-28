@@ -7,6 +7,7 @@ require_once 'php/stopWords.php';
 
 session_start();
 
+// Si l'utilisateur n'est pas connecté, on le redirige vers la page de connexion
 if (!isset($_SESSION['id'])) {
     header('Location: autres/connexion.php');
     exit;
@@ -227,8 +228,9 @@ if (!isset($_SESSION['id'])) {
                     <div class="container-fluid">
 
                     <?php
+                    // affichage des alertes en fonction des paramètres de l'url
 
-                        if (isset($_GET["try"])){
+                        if (isset($_GET["try"])){ // si l'envoi d'un mail d'essai a été effectué
 
                                 echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
                                 Checkez vos mails ! Un essai a été réalisé.
@@ -237,7 +239,7 @@ if (!isset($_SESSION['id'])) {
                                 </button>
                                 </div>';
                             
-                        }else if (isset($_GET["add"])){
+                        }else if (isset($_GET["add"])){ // si l'ajout d'un motif a été effectué
                                 echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
                                 Motif ajouté avec succès !
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -245,7 +247,7 @@ if (!isset($_SESSION['id'])) {
                                 </button>
                                 </div>';
                             
-                        }else if (isset($_GET["delete"])){
+                        }else if (isset($_GET["delete"])){ // si la suppression d'un motif a été effectué
                                 echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
                                 Motif supprimé avec succès !
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -253,7 +255,7 @@ if (!isset($_SESSION['id'])) {
                                 </button>
                                 </div>';
 
-                        }else if (isset($_GET["full"])){
+                        }else if (isset($_GET["full"])){ // si l'utilisateur a déjà 2 alertes
                                 echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 Vous ne pouvez pas ajouter plus de 2 alertes !
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -270,10 +272,7 @@ if (!isset($_SESSION['id'])) {
                         <p class="mb-4">Vous pouvez ajouter ou supprimer des alertes en cliquant sur les boutons ci-dessous. En fonction de l'intervalle de temps que vous avez choisi, vous recevrez un mail à chaque fois que le motif sera trouvé dans les ressources.</p>
 
                         <?php
-                        // Récupération de tous les crontabs recherchés
-                        // $crontabs = getAllResearchedPaterns();
-
-                        //for debug
+                        // Récupération de tous les alertes de l'utilisateur
                         $crontabs = $db->q(
                         'SELECT * FROM T_Alertes WHERE idUser = :id', 
                         array(
@@ -281,9 +280,7 @@ if (!isset($_SESSION['id'])) {
                             )
                         );
 
-
-
-
+                        // Si au moins un crontab est trouvé
                         if (count($crontabs) > 0) {
                             // Affichage du tableau si au moins un crontab est trouvé
                             echo '<div class="table-responsive">';
@@ -315,7 +312,6 @@ if (!isset($_SESSION['id'])) {
                             echo '</div>';
                         } else {
                             // Affichage d'un message si aucun crontab n'est trouvé
-                           // echo '<p>Aucun crontab trouvé.</p>';
                            echo '<div class="alert alert-info" role="alert">
                             Vous n\'avez pas encore ajouté de motifs. Cliquez sur le bouton ci-dessous pour en ajouter un.
                             </div>';
