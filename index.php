@@ -1172,8 +1172,6 @@ $sujets = getSubjectsTextForCloud($theses);
                     |
                     <a href="https://github.com/Berachem/theses" class="text-dark">Code Source</a>
                     |
-                    <a href="https://www.cnil.fr/" class="text-dark">CNIL</a>
-                    |
                     <a href="" class="text-dark">Accueil</a>
                     |
                     <a href="mailto:berachem.markria@gmail.com" class="text-dark">Contact</a>

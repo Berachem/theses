@@ -1,16 +1,13 @@
-<?php 
-session_start();
-$theses = $_SESSION["theses"];
-
-// top 10 établissements qui ont le plus de thèses 
-$etablissements = array();
-$thesesNumberPerEtablissement = array();
+<?php
+// top 10 établissements qui ont le plus de thèses
+$etablissements = array(); // array of names of the institutions
+$thesesNumberPerEtablissement = array(); // array of number of theses per institution
 foreach($theses as $these){
     if(!in_array($these->getEtablissement(), $etablissements)){
-        array_push($etablissements, $these->getEtablissement());
-        $thesesNumberPerEtablissement[$these->getEtablissement()] = 1;
+        array_push($etablissements, $these->getEtablissement()); // add the name of the institution to the array
+        $thesesNumberPerEtablissement[$these->getEtablissement()] = 1; // add the number of theses (1) to the array
     }else{
-        $thesesNumberPerEtablissement[$these->getEtablissement()]++;
+        $thesesNumberPerEtablissement[$these->getEtablissement()]++; // increment the number of theses
     }
 }
 // keep only the top 10 and put the rest in "autres"
@@ -34,6 +31,7 @@ $_SESSION["etablissements-colors"] = array('#4e73df', '#1cc88a', '#36b9cc', '#C8
 ?>
 
 
+
 <script>
 
 // Set new default font family and font color to mimic Bootstrap's default styling
@@ -48,7 +46,7 @@ var myPieChart = new Chart(ctx, {
     labels: ["<?php echo implode('", "', array_keys($thesesNumberPerEtablissement)); ?>"],
     datasets: [{
       data: [<?php echo implode(', ', $thesesNumberPerEtablissement); ?>],
-      backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#C8331C', '#13D253', '#A808A0', '#D21399', '#D2D213', '#D213D2', '#D21313', '#D2D2D2'],
+      backgroundColor: [<?php foreach($_SESSION["etablissements-colors"] as $color){ echo "'".$color."', "; } ?>],
       hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#A62817', '#2CAF35', '#D21399', '#D213D2', '#D21313', '#D2D2D2', '#D21313', '#D2D2D2'],
       hoverBorderColor: "rgba(234, 236, 244, 1)",
     }],
