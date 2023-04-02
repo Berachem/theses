@@ -866,7 +866,7 @@ $sujets = getSubjectsTextForCloud($theses);
                         </div>
 
                         <!-- Thèses par etablissements-->
-                        <div class="col-xl-4 col-lg-5" data-aos="fade-left">
+                        <div class="col-xl-4 col-lg-5" data-aos="fade-left" style="margin-top: 10px;">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -876,17 +876,6 @@ $sujets = getSubjectsTextForCloud($theses);
                                 <div class="card-body">
                                     <div class="chart-pie pt-4 pb-2">
                                         <canvas id="pie-chart-etablissements"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <?php
-                                        if (isset($_SESSION["etablissements"]) && isset($_SESSION["etablissements-colors"])) {
-                                            for ($i = 0; $i < count($_SESSION["etablissements"]); $i++) {
-                                                echo '<span class="mr-2">
-                                                            <i class="fas fa-circle" style="color: ' . $_SESSION["etablissements-colors"][$i] . '"></i> ' . $_SESSION["etablissements"][$i] . '
-                                                        </span>';
-                                            }
-                                        }
-                                        ?>
                                     </div>
                                 </div>
                             </div>

@@ -64,7 +64,9 @@ var myPieChart = new Chart(ctx, {
       caretPadding: 10,
     },
     legend: {
-      display: false
+      display: true,
+      position: 'bottom',
+      itemMarginTop: 10,
     },
     cutoutPercentage: 80,
   },
